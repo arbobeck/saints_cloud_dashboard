@@ -15,7 +15,7 @@ Architecture:
 
 Structure:
 - api/ - .NET API
-- ui/ - Angular
+- ui/ - Angular (hosted in Azure App Service)
 - infra/ - Terraform
 - piplines/ - Azure DevOps YAML pipelines
 - docs/ - documentation
@@ -32,5 +32,5 @@ Run locally (with Docker):
 4. in the browser, go to: 'http://localhost:5000/api/saints'
 
 Run locally (with Swagger):
-1. run in VSCode via .Net/C/C++ Debugger (vsdbg)
-1. in the browser, go to 'http://localhost:5259/swagger/index.html'
+1. run 'dotnet run'
+1. in the browser, go to 'http://localhost:5259'
