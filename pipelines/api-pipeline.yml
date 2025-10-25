@@ -1,0 +1,35 @@
+trigger:
+  branches:
+    include:
+      - main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  buildConfiguration: 'Release'
+
+stages:
+- stage: Build 
+  jobs:
+    - job: Build
+      steps:
+      - task: UseDotNet@2
+        inputs:
+          packageType: 'sdk'
+          version: '8.0.x'
+
+      - script: |
+          cd api/SaintsApi
+          dotnet restore
+          dotnet build --configuration $(buildConfiguration)
+        displayName: 'Restoring and Building .NET'
+
+      - script: |
+          dotnet test --configuration $(buildConfiguration)
+        displayName: 'Running Unit Tests'
+
+      - script: |
+          docker build -t saintsapi:$(Build.BuildId) .
+        workingDirectory: api/SaintsApi
+        displayName: 'Building Docker Image'
