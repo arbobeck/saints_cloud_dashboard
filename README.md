@@ -25,8 +25,12 @@ Next steps:
 - Angular dashboard
 - infra with Terraform + automate CI/CD
 
-Run locally:
+Run locally (with Docker):
 1. navigate to /saints_cloud_dashboard/api/SaintsApi
 2. run 'docker build -t saintsapi .'
 3. run 'docker run -p 5000:8080 saintsapi'
 4. in the browser, go to: 'http://localhost:5000/api/saints'
+
+Run locally (with Swagger):
+1. run in VSCode via .Net/C/C++ Debugger (vsdbg)
+1. in the browser, go to 'http://localhost:5259/swagger/index.html'
