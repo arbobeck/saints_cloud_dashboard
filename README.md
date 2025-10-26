@@ -9,7 +9,7 @@ Architecture:
 - Angular 18
 - .NET 8 Web API
 - Terraform + Azure App Services, SQL
-- Azure Key Vault, RBAC, Managed Identity,
+- Azure Key Vault, RBAC, Managed Identity
 - Grafana, Azure Monitor
 - Azure DevOps Pipelines
 
@@ -24,6 +24,10 @@ Next steps:
 - create the mvp: API + containerize
 - Angular dashboard
 - infra with Terraform + automate CI/CD
+- set up Single-Sign-On
+- set up Docker-Compose
+- add Entity Framework Core (EF Core) (ORM) to central server
+- add caching layer between server + database (Azure alternative to Reddis)
 
 Run locally (with Docker):
 1. navigate to /saints_cloud_dashboard/api/SaintsApi
