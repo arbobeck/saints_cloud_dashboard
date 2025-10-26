@@ -1,0 +1,40 @@
+trigger:
+  branches:
+    include:
+      - main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+# using node 22 for angular
+steps:
+- task: NodeTool@0
+  inputs:
+    versionSpec: '22.x'
+  displayName: 'Use Node.js 22'
+
+# install dependencies and build angular
+- script: |
+    cd ui/saints-ui
+    npm ci
+    npm run build -- --configuration production
+  displayName: 'Build Angular UI'
+
+# verify angular (debug)
+- script: |
+    echo "Contents of dist:"
+    ls -R ui/saints-ui/dist
+  displayName: 'List dist folder'
+
+# build and push Docker image
+- task: Docker@2
+  displayName: 'Build and push DOcker image'
+  inputs:
+    containerRegistry: '<your-container-registry-service-connection>'
+    repository: 'saints-ui'
+    command: 'buildAndPush'
+    Dockerfile: 'ui/saints-ui/Dockerfile'
+    buildContext: 'ui/saints-ui'
+    tags: |
+      latest
+      $(Build.BuildId)

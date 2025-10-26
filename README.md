@@ -29,12 +29,17 @@ Next steps:
 - add Entity Framework Core (EF Core) (ORM) to central server
 - add caching layer between server + database (Azure alternative to Reddis)
 
-Run locally (with Docker):
+Run API locally (with Docker):
 1. navigate to /saints_cloud_dashboard/api/SaintsApi
 2. run 'docker build -t saintsapi .'
 3. run 'docker run -p 5000:8080 saintsapi'
 4. in the browser, go to: 'http://localhost:5000/api/saints'
 
-Run locally (with Swagger):
+Run API locally (with Swagger):
 1. run 'dotnet run'
 1. in the browser, go to 'http://localhost:5259'
+
+Run UI locally (with NGINX):
+1. navigate to /ui/saints-ui
+2. run 'ng serve'
+3. in the browser, go to 'http://localhost:4200'

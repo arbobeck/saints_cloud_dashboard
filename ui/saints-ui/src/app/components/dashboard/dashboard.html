@@ -1,0 +1,47 @@
+<div class="dashboard-container">
+  <h1>Saints & Feast Days Dashboard</h1>
+
+  <!-- Saints Table -->
+  <section class="saints-section">
+    <h2>Saints</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Feast Day</th>
+          <th>Patronage</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let saint of saints">
+          <td>{{ saint.id }}</td>
+          <td>{{ saint.name }}</td>
+          <td>{{ saint.feastDay }}</td>
+          <td>{{ saint.patronages.join(', ') }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- History Table -->
+  <section class="history-section">
+    <h2>Church History</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Year</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let h of history">
+          <td>{{ h.id }}</td>
+          <td>{{ h.name }}</td>
+          <td>{{ h.year }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+</div>
