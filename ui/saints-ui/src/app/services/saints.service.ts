@@ -2,27 +2,10 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { Saint } from '../models/saint.model';
+import { History } from '../models/history.model';
 
-// Frontend data types
-export interface Saint {
-  id: number;
-  name: string;
-  feastDay: string;
-  patronages: string[];
-}
-
-export interface History {
-  id: number;
-  name: string;
-  year: number;
-}
-
-
-@Injectable({
-  providedIn: 'root'  // makes it injectable globally
-})
-
-
+@Injectable({ providedIn: 'root' })
 
 export class SaintsService {
   private apiUrl = `${environment.apiBaseUrl}`;
@@ -33,8 +16,16 @@ export class SaintsService {
     return this.http.get<Saint[]>(`${this.apiUrl}/saints`);
   }
 
+  getSaintbyId(id: number): Observable<Saint> {
+    return this.http.get<Saint>(`${this.apiUrl}/${id}`)
+  }
+
   getHistory(): Observable<History[]> {
     return this.http.get<History[]>(`${this.apiUrl}/history`);
+  }
+
+  getHistorybyId(id: number): Observable<History> {
+    return this.http.get<History>(`${this.apiUrl}/${id}`)
   }
 }
 

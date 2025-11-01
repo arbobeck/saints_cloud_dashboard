@@ -1,10 +1,11 @@
+using Microsoft.EntityFrameworkCore;
+using SaintsApi.Data;
 using SaintsApi.Models;
-using SaintsApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
- 
-builder.Services.AddSingleton<SaintService>();
-builder.Services.AddSingleton<HistoryService>();
+
+builder.Services.AddDbContext<SaintsDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -13,12 +14,12 @@ var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI();
 
-app.MapGet("/api/saints", (SaintService svc) => svc.GetAll());
-app.MapGet("/api/saints/{id:int}", (int id, SaintService svc) =>
-    svc.GetById(id) is { } saint ? Results.Ok(saint) : Results.NotFound());
+app.MapGet("/api/saints", async (SaintsDbContext db) => await db.Saints.ToListAsync());
+app.MapGet("/api/saints/{id:int}", async (int id, SaintsDbContext db) =>
+    await db.Saints.FindAsync(id) is { } saint ? Results.Ok(saint) : Results.NotFound());
 
-app.MapGet("/api/history", (HistoryService svc) => svc.GetAll());
-app.MapGet("/api/history/{id:int}", (int id, HistoryService svc) =>
-    svc.GetById(id) is { } history ? Results.Ok(history) : Results.NotFound());
+app.MapGet("/api/history", async (SaintsDbContext db) => await db.History.ToListAsync());
+app.MapGet("/api/history/{id:int}", async (int id, SaintsDbContext db) =>
+    await db.History.FindAsync(id) is { } history ? Results.Ok(history) : Results.NotFound());
     
 app.Run();

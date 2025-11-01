@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { SaintsService, Saint, History } from '../../services/saints.service';
+import { SaintsService } from '../../services/saints.service';
+import { Saint } from '../../models/saint.model'; 
+import { History } from '../../models/history.model';
 import { CommonModule } from '@angular/common';
 
 @Component({

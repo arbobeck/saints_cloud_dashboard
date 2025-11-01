@@ -1,0 +1,49 @@
+version: "3.9"
+
+services:
+  saints-sql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: saints-sql
+    environment:
+      SA_PASSWORD: "YourPassword123"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
+    networks:
+      - saints-net
+    volumes:
+      - ./docs/seed_saints_history.sql:/tmp/seed_saints_history.sql
+    command: >
+      /bin/zsh -c "
+      /opt/mssql/bin/sqlservr & 
+      sleep 20s; 
+      /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P YourPassword123 -i /tmp/seed_saints_history.sql;
+      wait
+      "
+  saints-api:
+    build: ./api/SaintsApi
+    container_name: saints-api
+    depends_on:
+      - saints-sql
+    environment:
+      ConnectionStrings__SaintsDb: "Server=saints-sql,1433;Database=SaintsDB;User Id=sa;Password=YourPassword123;TrustServerCertificate=True;"
+      DOTNET_RUNNING_IN_CONTAINER: "true"
+      DOTNET_HOST: "0.0.0.0"
+    ports:
+      - "5000:8080"
+    networks:
+      - saints-net
+
+  angular-client:
+    build: ./ui/saints-ui
+    container_name: angular-client
+    ports:
+      - "4200:4200"
+    networks:
+      - saints-net
+    depends_on:
+      - saints-api
+
+networks:
+  saints-net:
+    driver: bridge

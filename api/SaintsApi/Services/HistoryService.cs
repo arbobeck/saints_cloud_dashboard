@@ -1,3 +1,5 @@
+/*
+
 using SaintsApi.Models;
 
 namespace SaintsApi.Services;
@@ -14,3 +16,5 @@ public class HistoryService
     public IEnumerable<History> GetAll() => _history;
     public History? GetById(int id) => _history.FirstOrDefault(s => s.Id == id);
 }
+
+*/

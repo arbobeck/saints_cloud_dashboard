@@ -21,9 +21,6 @@ Structure:
 - docs/ - documentation
 
 Next steps:
-- create the mvp: API + containerize
-- Angular dashboard
-- infra with Terraform + automate CI/CD
 - set up Single-Sign-On
 - set up Docker-Compose
 - add Entity Framework Core (EF Core) (ORM) to central server
@@ -43,3 +40,11 @@ Run UI locally (with NGINX):
 1. navigate to /ui/saints-ui
 2. run 'ng serve'
 3. in the browser, go to 'http://localhost:4200'
+
+
+New Run:
+1. navigate to root directory
+2. run docker-compose build --no-cache                             
+docker-compose up
+
+3. - frontend currently not displaying database info (needs to be updated)

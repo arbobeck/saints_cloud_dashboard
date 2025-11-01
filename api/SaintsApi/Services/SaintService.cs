@@ -1,3 +1,5 @@
+/*
+
 using SaintsApi.Models;
 
 namespace SaintsApi.Services;
@@ -17,3 +19,5 @@ public class SaintService
     public IEnumerable<Saint> GetAll() => _saints;
     public Saint? GetById(int id) => _saints.FirstOrDefault(s => s.Id == id);
 }
+
+*/

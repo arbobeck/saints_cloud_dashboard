@@ -1,28 +1,24 @@
 #Multistage Dockerfile (STAGE 1: build, STAGE 2: run)
 
-# 1: build
-FROM node:22 AS build
+FROM node:20-alpine
+
+# Set working directory
 WORKDIR /app
 
-# 2: copy and install dependencies
-COPY package*.json ./
-RUN npm ci
+# Install Angular CLI globally
+RUN npm install -g @angular/cli
 
-#3: copy the rest of the source code
+# Copy package.json and package-lock.json first (for caching)
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy the rest of the app
 COPY . .
 
-# 4: build the app for prod
-RUN npm run build -- --configuration production
+# Expose port Angular serves on
+EXPOSE 4200
 
-# 5 serve
-FROM nginx:alpine
-
-# 6: copy
-COPY --from=build /app/dist/saints-ui/browser /usr/share/nginx/html
-
-# 7: expose
-EXPOSE 80
-
-# start nginx
-CMD ["nginx", "-g", "daemon off;"]
-
+# Start Angular
+CMD ["ng", "serve", "--host", "0.0.0.0"]
