@@ -16,20 +16,25 @@ services:
       - saints-net
     volumes:
       - ./docs:/docs
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P YourPassword123 -C -Q 'SELECT 1'"]
+      interval: 5s
+      retries: 12
+      start_period: 10s
+      timeout: 5s
 
   saints-ef:
     image: mcr.microsoft.com/dotnet/sdk:8.0
     container_name: saints-ef
     depends_on:
-      - saints-sql
+      saints-sql:
+        condition: service_healthy
     working_dir: /app
     volumes:
       - ./api/SaintsApi:/app
     entrypoint: ["bash", "-c"]
     command: >
-      "echo 'Waiting for SQL Server...' &&
-       sleep 5 &&
-       dotnet tool install --global dotnet-ef --version 8.0.0 &&
+      "dotnet tool install --global dotnet-ef --version 8.0.0 &&
        export PATH=\"$PATH:/root/.dotnet/tools\" &&
        dotnet ef database update --connection \"Server=saints-sql,1433;Database=SaintsDB;User Id=sa;Password=YourPassword123;TrustServerCertificate=True;\""
     networks:
@@ -39,18 +44,16 @@ services:
     image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: saints-seed
     depends_on:
-      - saints-ef
+      saints-ef:
+        condition: service_completed_successfully
     volumes:
       - ./docs:/docs
     entrypoint: ["bash", "-c"]
     command: >
-      "echo 'Waiting for migrations to complete...' &&
-       sleep 80 &&
-       echo 'Checking if database exists...' &&
-       until /opt/mssql-tools18/bin/sqlcmd -S saints-sql -U sa -P YourPassword123 -C -Q 'SELECT 1 FROM SaintsDB.INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = ''Saints''' &> /dev/null
+      "until /opt/mssql-tools18/bin/sqlcmd -S saints-sql -U sa -P YourPassword123 -C -Q 'SELECT 1 FROM SaintsDB.INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = ''Saints''' &> /dev/null
        do
          echo 'Waiting for Saints table...'
-         sleep 5
+         sleep 2
        done &&
        echo 'Running seed script...' &&
        /opt/mssql-tools18/bin/sqlcmd -S saints-sql -U sa -P YourPassword123 -C -i /docs/seed_saints_history.sql &&
@@ -62,17 +65,16 @@ services:
     image: mcr.microsoft.com/dotnet/sdk:8.0
     container_name: saints-api
     depends_on:
-      - saints-sql
-      - saints-ef
-      - saints-seed
+      saints-sql:
+        condition: service_healthy
+      saints-seed:
+        condition: service_completed_successfully
     working_dir: /app
     volumes:
       - ./api/SaintsApi:/app
     entrypoint: ["bash", "-c"]
     command: >
-      "echo 'Waiting for seed data...' &&
-       sleep 65 &&
-       dotnet restore &&
+      "dotnet restore &&
        dotnet build &&
        dotnet run --urls http://0.0.0.0:5000"
     ports:
@@ -83,6 +85,12 @@ services:
       ASPNETCORE_ENVIRONMENT: "Development"
       ASPNETCORE_URLS: "http://+:5000"
       ConnectionStrings__SaintsDb: "Server=saints-sql,1433;Database=SaintsDB;User Id=sa;Password=YourPassword123;TrustServerCertificate=True;"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:5000/api/saints || exit 1"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 5s
 
   angular-client: 
     build: ./ui/saints-ui 
@@ -92,4 +100,5 @@ services:
     networks: 
       - saints-net 
     depends_on: 
-      - saints-api
+      saints-api:
+        condition: service_healthy
