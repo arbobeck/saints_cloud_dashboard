@@ -23,7 +23,7 @@ resource "azurerm_app_service" "api" {
 
   app_settings = {
     "ASPNETCORE_ENVIRONMENT"     = var.environment
-    "ConnectionStrings__SaintsDb" = "Server=${azurerm_sql_server.main.fully_qualified_domain_name};Database=${azurerm_sql_database.main.name};User Id=${var.sql_admin_user};Password=${var.sql_admin_password};Encrypt=true;"
+    "ConnectionStrings__SaintsDb" = "Server=${azurerm_mssql_server.main.fully_qualified_domain_name};Database=${azurerm_mssql_database.main.name};User Id=${var.sql_admin_user};Password=${var.sql_admin_password};Encrypt=true;"
     "DOCKER_REGISTRY_SERVER_URL" = "https://${azurerm_container_registry.acr.login_server}"
     "DOCKER_REGISTRY_SERVER_USERNAME" = azurerm_container_registry.acr.admin_username
     "DOCKER_REGISTRY_SERVER_PASSWORD" = azurerm_container_registry.acr.admin_password

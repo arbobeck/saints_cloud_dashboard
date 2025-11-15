@@ -1,4 +1,4 @@
-resource "azurerm_sql_server" "main" {
+resource "azurerm_mssql_server" "main" {
   name                         = "saintssql${random_integer.suffix.result}"
   resource_group_name          = azurerm_resource_group.saints_rg.name
   location                     = azurerm_resource_group.saints_rg.location
@@ -7,10 +7,8 @@ resource "azurerm_sql_server" "main" {
   administrator_login_password = var.sql_admin_password
 }
 
-resource "azurerm_sql_database" "main" {
-  name                = "SaintsDB"
-  resource_group_name = azurerm_resource_group.saints_rg.name
-  location            = azurerm_sql_server.main.location
-  server_name         = azurerm_sql_server.main.name
-  sku_name            = "Basic"
+resource "azurerm_mssql_database" "main" {
+  name      = "SaintsDB"
+  server_id = azurerm_mssql_server.main.id
+  sku_name  = "Basic"
 }
