@@ -17,8 +17,8 @@
         <tr *ngFor="let saint of saints">
           <td>{{ saint.id }}</td>
           <td>{{ saint.name }}</td>
-          <td>{{ saint.feastDay }}</td>
-          <td>{{ saint.patronages.join(', ') }}</td>
+          <td>{{ saint.feastDay | date:'longDate' }}</td>
+          <td>{{ saint.patronages }}</td>
         </tr>
       </tbody>
     </table>
