@@ -1,29 +1,16 @@
-
-
-/*
-
-# create sql server 
-
-resource "azurerm_mssql_server" "saints_sql" {
-    name        = "saints-sql-11120252"
-    resource_group_name = azurerm_resource_group.saints_rg.name
-    location    = azurerm_resource_group.saints_rg.location
-    version     = "12.0"
-    administrator_login = "sqladminuser"
-    administrator_login_password = "Password123?"
-
-    tags = {
-        environment = "Dev"
-    }
+resource "azurerm_sql_server" "main" {
+  name                         = "saintssql${random_integer.suffix.result}"
+  resource_group_name          = azurerm_resource_group.saints_rg.name
+  location                     = azurerm_resource_group.saints_rg.location
+  version                      = "12.0"
+  administrator_login          = var.sql_admin_user
+  administrator_login_password = var.sql_admin_password
 }
 
-# create sql db
-
-resource "azurerm_mssql_database" "saints_db" {
-    name        = "saints-db-1112025"
-    server_id = azurerm_mssql_server.saints_sql.id
-    sku_name    = "Basic"
-    max_size_gb = 2
+resource "azurerm_sql_database" "main" {
+  name                = "SaintsDB"
+  resource_group_name = azurerm_resource_group.saints_rg.name
+  location            = azurerm_sql_server.main.location
+  server_name         = azurerm_sql_server.main.name
+  sku_name            = "Basic"
 }
-
-*/

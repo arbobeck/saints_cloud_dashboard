@@ -35,3 +35,9 @@ appsettings.Development.json
 appsettings.*.json
 !appsettings.json
 !appsettings.Production.json
+
+# Terraform
+*.tfstate
+*.tfstate.*
+.terraform/
+terraform.tfvars

@@ -1,0 +1,13 @@
+# terraform.tfvars.example
+
+# Database
+sql_admin_user     = "sa"
+sql_admin_password = "YOUR_PASSWORD_HERE"   # replace with actual password in terraform.tfvars
+sql_database_name  = "SaintsDB"
+
+# Environment
+environment        = "dev"
+
+# Docker image tags
+api_image_tag      = "latest"
+ui_image_tag       = "latest"

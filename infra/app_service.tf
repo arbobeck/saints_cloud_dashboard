@@ -1,44 +1,50 @@
-# create hosting env: app service plan - Linux
-
-resource "azurerm_service_plan" "saints_plan" {
-    name        = "saints-plan"
-    location    = azurerm_resource_group.saints_rg.location
-    resource_group_name = azurerm_resource_group.saints_rg.name
-    os_type     = "Linux"
-    sku_name    = "B1"
+resource "azurerm_app_service_plan" "plan" {
+  name                = "saints-plan"
+  location            = azurerm_resource_group.saints_rg.location
+  resource_group_name = azurerm_resource_group.saints_rg.name
+  kind                = "Linux"
+  reserved            = true
+  sku {
+    tier = "Basic"
+    size = "B1"
+  }
 }
 
-# app services for the API
+# API App
+resource "azurerm_app_service" "api" {
+  name                = "saints-api"
+  location            = azurerm_resource_group.saints_rg.location
+  resource_group_name = azurerm_resource_group.saints_rg.name
+  app_service_plan_id = azurerm_app_service_plan.plan.id
 
-resource "azurerm_linux_web_app" "saints_api" {
-    name        = "saints-api-1112025"
-    location    = azurerm_resource_group.saints_rg.location
-    resource_group_name = azurerm_resource_group.saints_rg.name
-    service_plan_id = azurerm_service_plan.saints_plan.id
+  site_config {
+    linux_fx_version = "DOCKER|${azurerm_container_registry.acr.login_server}/saints-api:${var.api_image_tag}"
+  }
 
-    site_config {
-        app_command_line = ""
-    }
-
-    app_settings = {
-        "WEBSITES_ENABLE_APP_SERVICE_STORAGE" = "false"
-        "ASPNETCORE_ENVIRONMENT" = "Production"
-    }
+  app_settings = {
+    "ASPNETCORE_ENVIRONMENT"     = var.environment
+    "ConnectionStrings__SaintsDb" = "Server=${azurerm_sql_server.main.fully_qualified_domain_name};Database=${azurerm_sql_database.main.name};User Id=${var.sql_admin_user};Password=${var.sql_admin_password};Encrypt=true;"
+    "DOCKER_REGISTRY_SERVER_URL" = "https://${azurerm_container_registry.acr.login_server}"
+    "DOCKER_REGISTRY_SERVER_USERNAME" = azurerm_container_registry.acr.admin_username
+    "DOCKER_REGISTRY_SERVER_PASSWORD" = azurerm_container_registry.acr.admin_password
+  }
 }
 
-# app services for the UI
+# UI App
+resource "azurerm_app_service" "ui" {
+  name                = "saints-ui"
+  location            = azurerm_resource_group.saints_rg.location
+  resource_group_name = azurerm_resource_group.saints_rg.name
+  app_service_plan_id = azurerm_app_service_plan.plan.id
 
-resource "azurerm_linux_web_app" "saints_ui" {
-    name        = "saints-ui-1112025"
-    location    = azurerm_resource_group.saints_rg.location
-    resource_group_name = azurerm_resource_group.saints_rg.name
-    service_plan_id = azurerm_service_plan.saints_plan.id
+  site_config {
+    linux_fx_version = "DOCKER|${azurerm_container_registry.acr.login_server}/saints-ui:${var.ui_image_tag}"
+  }
 
-    site_config {
-        app_command_line = ""
-    }
-
-    app_settings = {
-        "WEBSITES_ENABLE_APP_SERVICE_STORAGE" = "false"
-    }
+  app_settings = {
+    "ASPNETCORE_ENVIRONMENT" = var.environment
+    "DOCKER_REGISTRY_SERVER_URL" = "https://${azurerm_container_registry.acr.login_server}"
+    "DOCKER_REGISTRY_SERVER_USERNAME" = azurerm_container_registry.acr.admin_username
+    "DOCKER_REGISTRY_SERVER_PASSWORD" = azurerm_container_registry.acr.admin_password
+  }
 }
