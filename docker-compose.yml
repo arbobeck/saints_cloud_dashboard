@@ -61,6 +61,17 @@ services:
     networks:
       - saints-net
 
+  saints-tests:
+    image: mcr.microsoft.com/dotnet/sdk:8.0
+    container_name: saints-tests
+    working_dir: /app
+    volumes:
+      - ./api:/app
+    command: >
+      bash -c "dotnet restore && dotnet build && dotnet test --logger console"
+    networks:
+      - saints-net
+
   saints-api:
     image: mcr.microsoft.com/dotnet/sdk:8.0
     container_name: saints-api
@@ -68,6 +79,8 @@ services:
       saints-sql:
         condition: service_healthy
       saints-seed:
+        condition: service_completed_successfully
+      saints-tests:
         condition: service_completed_successfully
     working_dir: /app
     volumes:

@@ -30,9 +30,8 @@ Next steps:
 - add caching layer between server + database (Azure alternative to Reddis)
 
 Run:
-1. navigate to root directory
-2. run  docker compose build --no-cache                             
-        docker compose up
+1. navigate to root directory /saints_cloud_dashboard
+2. run  docker compose -d
 
 * after cloning, don't forget to run 'cp .env.example .env
  and then edit .env with actual values'
