@@ -7,7 +7,7 @@ services:
     image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: saints-sql
     environment:
-      SA_PASSWORD: "YourPassword123"
+      SA_PASSWORD: ${SQL_PASSWORD}
       ACCEPT_EULA: "Y"
       MSSQL_PID: "Developer"
     ports:
