@@ -17,7 +17,7 @@ services:
     volumes:
       - ./docs:/docs
     healthcheck:
-      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P YourPassword123 -C -Q 'SELECT 1'"]
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U ${SQL_USER} -P ${SQL_PASSWORD} -C -Q 'SELECT 1'"]
       interval: 5s
       retries: 12
       start_period: 10s
@@ -36,7 +36,7 @@ services:
     command: >
       "dotnet tool install --global dotnet-ef --version 8.0.0 &&
        export PATH=\"$PATH:/root/.dotnet/tools\" &&
-       dotnet ef database update --connection \"Server=saints-sql,1433;Database=SaintsDB;User Id=sa;Password=YourPassword123;TrustServerCertificate=True;\""
+       dotnet ef database update --connection \"Server=${SQL_SERVER},1433;Database=${SQL_DATABASE};User Id=${SQL_USER};Password=${SQL_PASSWORD};TrustServerCertificate=True;\""
     networks:
       - saints-net
 
@@ -50,13 +50,13 @@ services:
       - ./docs:/docs
     entrypoint: ["bash", "-c"]
     command: >
-      "until /opt/mssql-tools18/bin/sqlcmd -S saints-sql -U sa -P YourPassword123 -C -Q 'SELECT 1 FROM SaintsDB.INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = ''Saints''' &> /dev/null
+      "until /opt/mssql-tools18/bin/sqlcmd -S ${SQL_SERVER} -U ${SQL_USER} -P ${SQL_PASSWORD} -C -Q 'SELECT 1 FROM ${SQL_DATABASE}.INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = ''Saints''' &> /dev/null
        do
          echo 'Waiting for Saints table...'
          sleep 2
        done &&
        echo 'Running seed script...' &&
-       /opt/mssql-tools18/bin/sqlcmd -S saints-sql -U sa -P YourPassword123 -C -i /docs/seed_saints_history.sql &&
+       /opt/mssql-tools18/bin/sqlcmd -S ${SQL_SERVER} -U ${SQL_USER} -P ${SQL_PASSWORD} -C -i /docs/seed_saints_history.sql &&
        echo 'Seed complete!'"
     networks:
       - saints-net
@@ -84,7 +84,7 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: "Development"
       ASPNETCORE_URLS: "http://+:5000"
-      ConnectionStrings__SaintsDb: "Server=saints-sql,1433;Database=SaintsDB;User Id=sa;Password=YourPassword123;TrustServerCertificate=True;"
+      ConnectionStrings__SaintsDb: "Server=${SQL_SERVER},1433;Database=${SQL_DATABASE};User Id=${SQL_USER};Password=${SQL_PASSWORD};TrustServerCertificate=True;"
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:5000/api/saints || exit 1"]
       interval: 10s
@@ -93,10 +93,13 @@ services:
       timeout: 5s
 
   angular-client: 
-    build: ./ui/saints-ui 
+    build: 
+      context: ./ui/saints-ui
+      args:
+        API_BASE_URL: ${API_BASE_URL}
     container_name: angular-client 
     ports: 
-      - "4200:4200" 
+      - "${ANGULAR_PORT}:4200"
     networks: 
       - saints-net 
     depends_on: 

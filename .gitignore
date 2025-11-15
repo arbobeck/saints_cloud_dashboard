@@ -22,3 +22,16 @@ dist/
 # OS files
 .DS_Store
 Thumbs.db
+
+# .env and docker-compose.override.yml
+.env
+.env.local
+docker-compose.override.yml
+*.env
+!.env.example
+
+# appsettings credentials
+appsettings.Development.json
+appsettings.*.json
+!appsettings.json
+!appsettings.Production.json

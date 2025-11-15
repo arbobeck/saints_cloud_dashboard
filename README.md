@@ -33,3 +33,6 @@ Run:
 1. navigate to root directory
 2. run  docker compose build --no-cache                             
         docker compose up
+
+* after cloning, don't forget to run 'cp .env.example .env
+ and then edit .env with actual values'
