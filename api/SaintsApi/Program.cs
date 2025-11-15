@@ -11,7 +11,6 @@ builder.Services.AddDbContext<SaintsDbContext>(options =>
     )
 );
 
-// Add CORS
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
@@ -27,22 +26,87 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Enable CORS
 app.UseCors();
 
 app.UseSwagger();
 app.UseSwaggerUI();
 
 app.MapGet("/api/saints", async (SaintsDbContext db) => 
-    await db.Saints.ToListAsync());
+{
+    try
+    {
+        return Results.Ok(await db.Saints.ToListAsync());
+    }
+    catch (Exception ex)
+    {
+        return Results.Problem($"Error retrieving saints: {ex.Message}");
+    }
+});
 
 app.MapGet("/api/saints/{id:int}", async (int id, SaintsDbContext db) =>
-    await db.Saints.FindAsync(id) is { } saint ? Results.Ok(saint) : Results.NotFound());
+{
+    if (id <= 0)
+        return Results.BadRequest("ID must be greater than 0");
+
+    try
+    {
+        var saint = await db.Saints.FindAsync(id);
+        return saint is not null ? Results.Ok(saint) : Results.NotFound();
+    }
+    catch (Exception ex)
+    {
+        return Results.Problem($"Error retrieving saint: {ex.Message}");
+    }
+});
+
+app.MapPost("/api/saints", async (Saint saint, SaintsDbContext db) =>
+{
+    if (string.IsNullOrWhiteSpace(saint.Name))
+        return Results.BadRequest("Name is required");
+    
+    if (saint.FeastDay == default)
+        return Results.BadRequest("Feast day is required");
+
+    try
+    {
+        db.Saints.Add(saint);
+        await db.SaveChangesAsync();
+        return Results.Created($"/api/saints/{saint.Id}", saint);
+    }
+    catch (Exception ex)
+    {
+        return Results.Problem($"Error creating saint: {ex.Message}");
+    }
+});
 
 app.MapGet("/api/history", async (SaintsDbContext db) => 
-    await db.History.ToListAsync());
+{
+    try
+    {
+        return Results.Ok(await db.History.ToListAsync());
+    }
+    catch (Exception ex)
+    {
+        return Results.Problem($"Error retrieving history: {ex.Message}");
+    }
+});
 
 app.MapGet("/api/history/{id:int}", async (int id, SaintsDbContext db) =>
-    await db.History.FindAsync(id) is { } history ? Results.Ok(history) : Results.NotFound());
+{
+    if (id <= 0)
+        return Results.BadRequest("ID must be greater than 0");
+
+    try
+    {
+        var history = await db.History.FindAsync(id);
+        return history is not null ? Results.Ok(history) : Results.NotFound();
+    }
+    catch (Exception ex)
+    {
+        return Results.Problem($"Error retrieving history: {ex.Message}");
+    }
+});
 
 app.Run();
+
+public partial class Program { }
