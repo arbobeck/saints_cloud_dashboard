@@ -28,7 +28,8 @@ VALUES
     (2, 'St. Augustine', '2025-08-28', 'Theologians'),
     (3, 'St. Teresa of Avila', '2025-10-15', 'Writers, Mystics'),
     (4, 'St. Daria & St. Chrysanthus', '2025-10-25', 'Judges'),
-    (5, 'St. Demetrius', '2025-10-26', 'Soldiers, Courage');
+    (5, 'St. Demetrius', '2025-10-26', 'Soldiers, Courage'),
+    (6, 'St. Abibus of Edessa', '2025-11-15', 'Contracts, Marriage, Syria');
 GO
 
 IF OBJECT_ID('History', 'U') IS NULL
