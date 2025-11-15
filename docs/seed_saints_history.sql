@@ -24,10 +24,11 @@ VALUES
     ('St. Abibus of Edessa', '2025-11-15', 'Contracts, Marriage, Syria');
 GO
 
--- Insert History (Id will auto-increment) - REMOVED THE ID VALUES
+-- Insert History (Id will auto-increment)
 INSERT INTO History (Name, Year)
 VALUES
     ('Pentecost', 33),
     ('Filioque added by Third Council of Toledo', 589),
-    ('Great Schism', 1054);
+    ('Great Schism', 1054),
+    ('Union of Uzhhorod', 1646);
 GO
