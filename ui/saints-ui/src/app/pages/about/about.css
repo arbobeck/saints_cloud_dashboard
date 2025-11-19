@@ -17,3 +17,9 @@
   margin: 0 auto 1rem auto;
   line-height: 1.6;
 }
+
+.about-page ul {
+  list-style-type: none;
+  display: block;
+  text-align: center;
+}
