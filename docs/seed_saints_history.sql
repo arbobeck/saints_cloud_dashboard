@@ -21,7 +21,8 @@ VALUES
     ('St. Teresa of Avila', '2025-10-15', 'Writers, Mystics'),
     ('St. Daria & St. Chrysanthus', '2025-10-25', 'Judges'),
     ('St. Demetrius', '2025-10-26', 'Soldiers, Courage'),
-    ('St. Abibus of Edessa', '2025-11-15', 'Contracts, Marriage, Syria');
+    ('St. Abibus of Edessa', '2025-11-15', 'Contracts, Marriage, Syria'),
+    ('St. Barlaam', '2025-11-19', 'Spiritual Converts, Truth Seekers');
 GO
 
 -- Insert History (Id will auto-increment)
@@ -30,5 +31,6 @@ VALUES
     ('Pentecost', 33),
     ('Filioque added by Third Council of Toledo', 589),
     ('Great Schism', 1054),
-    ('Union of Uzhhorod', 1646);
+    ('Union of Uzhhorod', 1646),
+    ('First Ruthenian Catholic Eparchy established by Pope Clement XIV', 1771);
 GO
