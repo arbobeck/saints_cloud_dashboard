@@ -7,7 +7,6 @@ resource "azurerm_key_vault" "saints_kv" {
     tenant_id   = data.azurerm_client_config.current.tenant_id
     sku_name    = "standard"
     purge_protection_enabled = false
-    rbac_authorization_enabled = true
 
 
     network_acls {
