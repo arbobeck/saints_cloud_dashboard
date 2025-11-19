@@ -1,0 +1,19 @@
+.about-page {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: sans-serif;
+  display: block;
+  text-align: left;
+}
+
+.about-page h1 {
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.about-page p {
+  max-width: 600px;
+  margin: 0 auto 1rem auto;
+  line-height: 1.6;
+}

@@ -14,13 +14,31 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let saint of saints">
-          <td>{{ saint.id }}</td>
-          <td>{{ saint.name }}</td>
-          <td>{{ saint.feastDay | date:'longDate' }}</td>
-          <td>{{ saint.patronages }}</td>
-        </tr>
-      </tbody>
+  <!-- Loading Spinner Row -->
+  <tr *ngIf="loadingSaints">
+    <td colspan="4" class="spinner-cell">
+      <app-loading-spinner></app-loading-spinner>
+    </td>
+  </tr>
+
+  <!-- Error Message Row -->
+  <tr *ngIf="errorSaints">
+    <td colspan="4">
+      <app-error-message [message]="errorSaints"></app-error-message>
+    </td>
+  </tr>
+
+  <!-- Data Rows -->
+  <ng-container *ngIf="!loadingSaints && !errorSaints">
+    <tr *ngFor="let saint of saints">
+      <td>{{ saint.id }}</td>
+      <td>{{ saint.name }}</td>
+      <td>{{ saint.feastDay | date:'longDate' }}</td>
+      <td>{{ saint.patronages }}</td>
+    </tr>
+  </ng-container>
+</tbody>
+
     </table>
   </section>
 
@@ -35,13 +53,30 @@
           <th>Year</th>
         </tr>
       </thead>
-      <tbody>
-        <tr *ngFor="let h of history">
-          <td>{{ h.id }}</td>
-          <td>{{ h.name }}</td>
-          <td>{{ h.year }}</td>
-        </tr>
-      </tbody>
+ <tbody>
+  <!-- Loading Spinner Row -->
+  <tr *ngIf="loadingHistory">
+    <td colspan="3" class="spinner-cell">
+      <app-loading-spinner></app-loading-spinner>
+    </td>
+  </tr>
+
+  <!-- Error Message Row -->
+  <tr *ngIf="errorHistory">
+    <td colspan="3">
+      <app-error-message [message]="errorHistory"></app-error-message>
+    </td>
+  </tr>
+
+  <!-- Data Rows -->
+  <ng-container *ngIf="!loadingHistory && !errorHistory">
+    <tr *ngFor="let h of history">
+      <td>{{ h.id }}</td>
+      <td>{{ h.name }}</td>
+      <td>{{ h.year }}</td>
+    </tr>
+  </ng-container>
+</tbody>
     </table>
   </section>
 </div>

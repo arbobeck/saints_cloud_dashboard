@@ -1,0 +1,22 @@
+.liturgy-page {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: sans-serif;
+}
+
+.liturgy-page h1,
+.liturgy-page h2 {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.liturgy-page p {
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+
+.liturgy-page ul {
+  margin-bottom: 1rem;
+  padding-left: 1.5rem;
+}

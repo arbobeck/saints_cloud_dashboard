@@ -20,7 +20,7 @@ th, td {
 }
 
 th {
-  background-color: #4CAF50;
+  background-color: #c97149;
   color: white;
 }
 
@@ -30,4 +30,9 @@ tr:nth-child(even) {
 
 section {
   margin-bottom: 40px;
+}
+
+.spinner-cell {
+  text-align: center;
+  padding: 2rem 0;
 }
