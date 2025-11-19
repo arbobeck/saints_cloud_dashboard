@@ -1,37 +1,51 @@
-Saints & Feast Days Cloud Dashboard
+# Saints & Feast Days Cloud Dashboard
 
-Overview:
-A secure, cloud-hosted webapp built on Azure that display information about saints, feast days, and history + a quiz and a dashboard.
+## Overview
+A secure, cloud-hosted web application built on Azure that displays information about saints, feast days, and church history. The platform also includes a quiz and an interactive dashboard.
 
-- DevOps, Azure Sec, CI/CD, Infrastructure as Code, Key Vault integration, Managed Identity, and monitoring with Grafana.
+**Technologies & Practices:**
+- DevOps, Azure Security, CI/CD
+- Infrastructure as Code
+- Azure Key Vault integration
+- Managed Identity
+- Monitoring with Grafana
 
-Architecture:
-- Angular 18
-- .NET 8 Web API
-- Terraform + Azure App Services, SQL
-- Azure Key Vault, RBAC, Managed Identity
-- Grafana, Azure Monitor
-- Azure DevOps Pipelines
+---
 
-Structure:
-- api/ - .NET API
-- ui/ - Angular (hosted in Azure App Service)
-- infra/ - Terraform
-- piplines/ - Azure DevOps YAML pipelines
-- docs/ - documentation (also currently holds the sql seed file)
+## Architecture
+- **Frontend:** Angular 18  
+- **Backend:** .NET 8 Web API  
+- **Infrastructure:** Terraform + Azure App Services, SQL  
+- **Security:** Azure Key Vault, RBAC, Managed Identity  
+- **Monitoring:** Grafana, Azure Monitor  
+- **CI/CD:** Azure DevOps Pipelines
 
-Setup:
-SQL Server (port 1433)
-.NET API (port 5000) - RESTful API with Swagger
-Angular (port 4200)
+---
 
-Next steps:
-- set up Single-Sign-On
-- add caching layer between server + database (Azure alternative to Reddis)
+## Project Structure
+- api/ - .NET Web API
+- ui/ - Angular frontend (hosted in Azure App Service)
+- infra/ - Terraform scripts for infrastructure
+- pipelines/ - Azure DevOps YAML pipelines
+- docs/ - Documentation (also contains SQL seed file)
 
-Run:
-1. navigate to root directory /saints_cloud_dashboard
-2. run  docker compose -d
+## Setup
+1. **Database:** SQL Server (port 1433)  
+2. **Backend:** .NET API (port 5000) – RESTful API with Swagger  
+3. **Frontend:** Angular (port 4200)  
 
-* after cloning, don't forget to run 'cp .env.example .env
- and then edit .env with actual values'
+**After cloning the repository:**
+```bash
+cp .env.example .env
+# Then edit .env with actual values
+```
+Running Locally
+
+From the root directory (/saints_cloud_dashboard):
+```bash
+docker compose up -d
+```
+
+## Next Steps
+1. Set up Single-Sign-On (SSO)
+2. Add caching layer between server and database (Azure alternative to Redis)
