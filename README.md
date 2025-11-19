@@ -1,7 +1,7 @@
-# Saints & Feast Days Cloud Dashboard
+# Byzantica
 
 ## Overview
-A secure, cloud-hosted web application built on Azure that displays information about saints, feast days, and church history. The platform also includes a quiz and an interactive dashboard.
+A web app that displays information about saints, feast days, and Byzantine Catholicism.
 
 **Technologies & Practices:**
 - DevOps, Azure Security, CI/CD
