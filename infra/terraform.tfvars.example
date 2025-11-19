@@ -11,3 +11,4 @@ environment        = "dev"
 # Docker image tags
 api_image_tag      = "latest"
 ui_image_tag       = "latest"
+location           = "LOCATION"    # replace with actual location in terraform.tfvars
