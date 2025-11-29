@@ -26,7 +26,6 @@ services:
       start_period: 10s
       timeout: 5s
 
-# entity framework
   saints-ef:
     image: mcr.microsoft.com/dotnet/sdk:8.0
     container_name: saints-ef
@@ -41,7 +40,7 @@ services:
     entrypoint: ["bash", "-c"]
     command: >
       "dotnet restore &&
-       dotnet tool install --global dotnet-ef --version 8.0.0 &&
+       dotnet tool install --global dotnet-ef --version 8.0.0 2>/dev/null || echo 'EF already installed' &&
        export PATH=\"$PATH:/root/.dotnet/tools\" &&
        dotnet ef database update --connection \"Server=${SQL_SERVER},1433;Database=${SQL_DATABASE};User Id=${SQL_USER};Password=${SQL_PASSWORD};TrustServerCertificate=True;\""
     networks:
@@ -69,6 +68,7 @@ services:
       - saints-net
 
   saints-tests:
+    profiles: ["dev"]
     image: mcr.microsoft.com/dotnet/sdk:8.0
     container_name: saints-tests
     working_dir: /app
@@ -80,7 +80,8 @@ services:
     networks:
       - saints-net
 
-  saints-api:
+  saints-api-dev:
+    profiles: ["dev"]
     image: mcr.microsoft.com/dotnet/sdk:8.0
     container_name: saints-api
     depends_on:
@@ -93,7 +94,7 @@ services:
     working_dir: /app
     volumes:
       - ./api/SaintsApi:/app
-      - dotnet-packages:/root/.nuget/packages 
+      - dotnet-packages:/root/.nuget/packages
     entrypoint: ["bash", "-c"]
     command: >
       "dotnet restore &&
@@ -114,16 +115,57 @@ services:
       start_period: 30s
       timeout: 5s
 
-  angular-client: 
-    build: 
+  saints-api-prod:
+    profiles: ["prod"]
+    image: ghcr.io/arbobeck/saints-api:latest
+    container_name: saints-api
+    depends_on:
+      saints-sql:
+        condition: service_healthy
+      saints-seed:
+        condition: service_completed_successfully
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_URLS: "http://+:5000"
+      ConnectionStrings__SaintsDb: "Server=${SQL_SERVER},1433;Database=${SQL_DATABASE};User Id=${SQL_USER};Password=${SQL_PASSWORD};TrustServerCertificate=True;"
+    ports:
+      - "5000:5000"
+    networks:
+      - saints-net
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:5000/api/saints || exit 1"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 5s
+
+  angular-client-dev:
+    profiles: ["dev"]
+    build:
       context: ./ui/saints-ui
       args:
         API_BASE_URL: ${API_BASE_URL}
-    container_name: angular-client 
-    ports: 
+    container_name: angular-client
+    ports:
       - "${ANGULAR_PORT}:4200"
-    networks: 
-      - saints-net 
-    depends_on: 
-      saints-api:
+    networks:
+      - saints-net
+    depends_on:
+      saints-api-dev:
+        condition: service_healthy
+
+  angular-client-prod:
+    profiles: ["prod"]
+    image: ghcr.io/arbobeck/saints-angular:latest
+    container_name: angular-client
+    ports:
+      - "${ANGULAR_PORT}:4200"
+    networks:
+      - saints-net
+    environment:
+      API_BASE_URL: "http://localhost:5000"
+    restart: unless-stopped
+    depends_on:
+      saints-api-prod:
         condition: service_healthy

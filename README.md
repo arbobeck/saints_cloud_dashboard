@@ -39,11 +39,18 @@ A web app that displays information about saints, feast days, and Byzantine Cath
 cp .env.example .env
 # Then edit .env with actual values
 ```
-Running Locally
+Running Dev
 
 From the root directory (/saints_cloud_dashboard):
 ```bash
-docker compose up -d
+docker compose --profile dev up -d
+```
+
+Running Prod
+
+From the root directory (/saints_cloud_dashboard):
+```bash
+docker compose --profile prod up -d
 ```
 
 ## Next Steps
