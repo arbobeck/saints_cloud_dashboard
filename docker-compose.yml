@@ -1,6 +1,10 @@
 networks:
   saints-net:
 
+volumes:
+  dotnet-tools:
+  dotnet-packages:
+
 services:
   saints-sql:
     image: mcr.microsoft.com/mssql/server:2022-latest
@@ -32,9 +36,12 @@ services:
     working_dir: /app
     volumes:
       - ./api/SaintsApi:/app
+      - dotnet-tools:/root/.dotnet/tools
+      - dotnet-packages:/root/.nuget/packages
     entrypoint: ["bash", "-c"]
     command: >
-      "dotnet tool install --global dotnet-ef --version 8.0.0 &&
+      "dotnet restore &&
+       dotnet tool install --global dotnet-ef --version 8.0.0 &&
        export PATH=\"$PATH:/root/.dotnet/tools\" &&
        dotnet ef database update --connection \"Server=${SQL_SERVER},1433;Database=${SQL_DATABASE};User Id=${SQL_USER};Password=${SQL_PASSWORD};TrustServerCertificate=True;\""
     networks:
@@ -67,6 +74,7 @@ services:
     working_dir: /app
     volumes:
       - ./api:/app
+      - dotnet-packages:/root/.nuget/packages
     command: >
       bash -c "dotnet restore && dotnet build && dotnet test --logger console"
     networks:
@@ -85,6 +93,7 @@ services:
     working_dir: /app
     volumes:
       - ./api/SaintsApi:/app
+      - dotnet-packages:/root/.nuget/packages 
     entrypoint: ["bash", "-c"]
     command: >
       "dotnet restore &&
