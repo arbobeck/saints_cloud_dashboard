@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SaintsService } from '../../services/saints.service';
-import { Saint } from '../../models/saint.model'; 
+import { Saint } from '../../models/saint.model';
 import { History } from '../../models/history.model';
 import { LoadingSpinner } from '../loading-spinner/loading-spinner';
 import { ErrorMessage } from '../error-message/error-message';
@@ -16,10 +16,8 @@ import { ErrorMessage } from '../error-message/error-message';
 export class DashboardComponent implements OnInit {
   saints: Saint[] = [];
   history: History[] = [];
-
   loadingSaints = false;
   loadingHistory = false;
-
   errorSaints: string | null = null;
   errorHistory: string | null = null;
 
@@ -30,32 +28,30 @@ export class DashboardComponent implements OnInit {
     this.fetchHistory();
   }
 
-  fetchSaints() {
+  fetchSaints(): void {
     this.loadingSaints = true;
     this.errorSaints = null;
-
     this.saintsService.getSaints().subscribe({
-      next: (data) => {
+      next: (data: Saint[]) => {  // Added type
         this.saints = data;
         this.loadingSaints = false;
       },
-      error: (err) => {
+      error: (_err: unknown) => {  // Added underscore prefix and type
         this.errorSaints = 'Failed to load saints';
         this.loadingSaints = false;
       }
     });
   }
 
-  fetchHistory() {
+  fetchHistory(): void {
     this.loadingHistory = true;
     this.errorHistory = null;
-
     this.saintsService.getHistory().subscribe({
-      next: (data) => {
+      next: (data: History[]) => {  // Added type
         this.history = data;
         this.loadingHistory = false;
       },
-      error: (err) => {
+      error: (_err: unknown) => {  // Added underscore prefix and type
         this.errorHistory = 'Failed to load history';
         this.loadingHistory = false;
       }

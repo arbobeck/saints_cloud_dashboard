@@ -31,7 +31,7 @@ app.UseCors();
 app.UseSwagger();
 app.UseSwaggerUI();
 
-app.MapGet("/api/saints", async (SaintsDbContext db) => 
+app.MapGet("/api/saints", async (SaintsDbContext db) =>
 {
     try
     {
@@ -63,7 +63,7 @@ app.MapPost("/api/saints", async (Saint saint, SaintsDbContext db) =>
 {
     if (string.IsNullOrWhiteSpace(saint.Name))
         return Results.BadRequest("Name is required");
-    
+
     if (saint.FeastDay == default)
         return Results.BadRequest("Feast day is required");
 
@@ -79,7 +79,7 @@ app.MapPost("/api/saints", async (Saint saint, SaintsDbContext db) =>
     }
 });
 
-app.MapGet("/api/history", async (SaintsDbContext db) => 
+app.MapGet("/api/history", async (SaintsDbContext db) =>
 {
     try
     {

@@ -1,0 +1,17 @@
+{
+  "monthly_budget": 200.00,
+  "current_spend": 87.50,
+  "currency": "USD",
+  "thresholds": {
+    "warning": 70,
+    "critical": 90
+  },
+  "services": {
+    "App Service": 45.00,
+    "SQL Database": 25.00,
+    "Container Registry": 10.50,
+    "Virtual Network": 5.00,
+    "Storage Account": 2.00
+  },
+  "last_updated": "2025-11-30"
+}
