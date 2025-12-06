@@ -30,7 +30,6 @@ builder.Services.AddSwaggerGen();
 var app = builder.Build();
 
 app.UseCors();
-
 app.UseSwagger();
 app.UseSwaggerUI();
 

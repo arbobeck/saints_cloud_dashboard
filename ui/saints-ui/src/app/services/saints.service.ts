@@ -3,24 +3,25 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Saint } from '../models/saint.model';
 import { History } from '../models/history.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SaintsService {
-  private apiUrl = 'http://localhost:5000/api';
+  private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) { }
 
   getSaints(): Observable<Saint[]> {
-    return this.http.get<Saint[]>(`${this.apiUrl}/saints`);  // Fixed: () not ``
+    return this.http.get<Saint[]>(`${this.apiUrl}/saints`);
   }
 
   getSaint(id: number): Observable<Saint> {
-    return this.http.get<Saint>(`${this.apiUrl}/saints/${id}`);  // Fixed: () not ``
+    return this.http.get<Saint>(`${this.apiUrl}/saints/${id}`);
   }
 
-  getHistory(): Observable<History[]> {  // Added missing method
+  getHistory(): Observable<History[]> {
     return this.http.get<History[]>(`${this.apiUrl}/history`);
   }
 }

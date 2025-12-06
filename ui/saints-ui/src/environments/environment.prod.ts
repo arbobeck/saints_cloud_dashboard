@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiBaseUrl: '/api'
+  apiUrl: 'https://saints-api-dzwz.onrender.com'
 };
