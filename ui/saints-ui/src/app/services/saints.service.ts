@@ -11,7 +11,9 @@ import { environment } from '../../environments/environment';
 export class SaintsService {
   private apiUrl = environment.apiUrl;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) { 
+    console.log('API URL:', this.apiUrl);
+  }
 
   getSaints(): Observable<Saint[]> {
     return this.http.get<Saint[]>(`${this.apiUrl}/saints`);

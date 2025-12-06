@@ -41,3 +41,5 @@ appsettings.*.json
 *.tfstate.*
 .terraform/
 terraform.tfvars
+# Local Netlify folder
+.netlify
