@@ -18,7 +18,7 @@ builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
     {
-        policy.WithOrigins("http://localhost:4200", "https://byzantica.org", "https://www.byzantica.org")
+        policy.WithOrigins("http://localhost:4200", "https://byzantica.org", "https://www.byzantica.org", "https://byzantica.netlify.app")
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
