@@ -1,20 +1,19 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace SaintsApi.Models
+namespace SaintsApi.Models;
+
+public class Saint
 {
-    public class Saint
-    {
-        public int Id { get; set; }
+    public int Id { get; set; }
 
-        [Required]
-        public string Name { get; set; } = string.Empty;
+    [Required]
+    public string Name { get; set; } = string.Empty;
 
-        [Required]
-        public DateTime FeastDay { get; set; }
+    [Required]
+    [Column(TypeName = "date")]
+    public DateTime FeastDay { get; set; }
 
-        [Required]
-        [Column(TypeName = "nvarchar(max)")]
-        public string Patronages { get; set; } = string.Empty;
-    }
+    [Required]
+    public string Patronages { get; set; } = string.Empty;
 }

@@ -4,23 +4,25 @@ networks:
 volumes:
   dotnet-tools:
   dotnet-packages:
+  postgres-data:
 
 services:
-  saints-sql:
-    image: mcr.microsoft.com/mssql/server:2022-latest
-    container_name: saints-sql
+  saints-postgres:
+    image: postgres:16-alpine
+    container_name: saints-postgres
     environment:
-      SA_PASSWORD: ${SQL_PASSWORD}
-      ACCEPT_EULA: "Y"
-      MSSQL_PID: "Developer"
+      POSTGRES_USER: ${POSTGRES_USER:-saintsuser}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB:-saintsdb}
     ports:
-      - "1433:1433"
+      - "5432:5432"
     networks:
       - saints-net
     volumes:
+      - postgres-data:/var/lib/postgresql/data
       - ./docs:/docs
     healthcheck:
-      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U ${SQL_USER} -P ${SQL_PASSWORD} -C -Q 'SELECT 1'"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-saintsuser} -d ${POSTGRES_DB:-saintsdb}"]
       interval: 5s
       retries: 12
       start_period: 10s
@@ -30,39 +32,43 @@ services:
     image: mcr.microsoft.com/dotnet/sdk:8.0
     container_name: saints-ef
     depends_on:
-      saints-sql:
+      saints-postgres:
         condition: service_healthy
     working_dir: /app
     volumes:
       - ./api/SaintsApi:/app
       - dotnet-tools:/root/.dotnet/tools
       - dotnet-packages:/root/.nuget/packages
+    environment:
+      ConnectionStrings__SaintsDb: "Host=saints-postgres;Database=${POSTGRES_DB:-saintsdb};Username=${POSTGRES_USER:-saintsuser};Password=${POSTGRES_PASSWORD}"
     entrypoint: ["bash", "-c"]
     command: >
       "dotnet restore &&
        dotnet tool install --global dotnet-ef --version 8.0.0 2>/dev/null || echo 'EF already installed' &&
        export PATH=\"$PATH:/root/.dotnet/tools\" &&
-       dotnet ef database update --connection \"Server=${SQL_SERVER},1433;Database=${SQL_DATABASE};User Id=${SQL_USER};Password=${SQL_PASSWORD};TrustServerCertificate=True;\""
+       echo 'Running migrations...' &&
+       dotnet ef database update"
     networks:
       - saints-net
 
   saints-seed:
-    image: mcr.microsoft.com/mssql/server:2022-latest
+    image: postgres:16-alpine
     container_name: saints-seed
     depends_on:
       saints-ef:
         condition: service_completed_successfully
     volumes:
       - ./docs:/docs
-    entrypoint: ["bash", "-c"]
+    environment:
+      PGPASSWORD: ${POSTGRES_PASSWORD}
+    entrypoint: ["sh", "-c"]
     command: >
-      "until /opt/mssql-tools18/bin/sqlcmd -S ${SQL_SERVER} -U ${SQL_USER} -P ${SQL_PASSWORD} -C -Q 'SELECT 1 FROM ${SQL_DATABASE}.INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = ''Saints''' &> /dev/null
-       do
+      "until psql -h saints-postgres -U ${POSTGRES_USER:-saintsuser} -d ${POSTGRES_DB:-saintsdb} -c 'SELECT 1 FROM \"Saints\" LIMIT 1;' 2>/dev/null; do
          echo 'Waiting for Saints table...'
          sleep 2
        done &&
        echo 'Running seed script...' &&
-       /opt/mssql-tools18/bin/sqlcmd -S ${SQL_SERVER} -U ${SQL_USER} -P ${SQL_PASSWORD} -C -i /docs/seed_saints_history.sql &&
+       psql -h saints-postgres -U ${POSTGRES_USER:-saintsuser} -d ${POSTGRES_DB:-saintsdb} -f /docs/seed_saints_history_postgres.sql &&
        echo 'Seed complete!'"
     networks:
       - saints-net
@@ -80,12 +86,12 @@ services:
     networks:
       - saints-net
 
-  saints-api-dev:
+  saints_api_dev:
     profiles: ["dev"]
     image: mcr.microsoft.com/dotnet/sdk:8.0
     container_name: saints-api
     depends_on:
-      saints-sql:
+      saints-postgres:
         condition: service_healthy
       saints-seed:
         condition: service_completed_successfully
@@ -107,7 +113,7 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: "Development"
       ASPNETCORE_URLS: "http://+:5000"
-      ConnectionStrings__SaintsDb: "Server=${SQL_SERVER},1433;Database=${SQL_DATABASE};User Id=${SQL_USER};Password=${SQL_PASSWORD};TrustServerCertificate=True;"
+      ConnectionStrings__SaintsDb: "Host=saints-postgres;Database=${POSTGRES_DB:-saintsdb};Username=${POSTGRES_USER:-saintsuser};Password=${POSTGRES_PASSWORD}"
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:5000/api/saints || exit 1"]
       interval: 10s
@@ -115,19 +121,19 @@ services:
       start_period: 30s
       timeout: 5s
 
-  saints-api-prod:
+  saints_api_prod:
     profiles: ["prod"]
     image: ghcr.io/arbobeck/saints-api:latest
-    container_name: saints-api
+    container_name: saints-api-prod
     depends_on:
-      saints-sql:
+      saints-postgres:
         condition: service_healthy
       saints-seed:
         condition: service_completed_successfully
     environment:
       ASPNETCORE_ENVIRONMENT: Production
       ASPNETCORE_URLS: "http://+:5000"
-      ConnectionStrings__SaintsDb: "Server=${SQL_SERVER},1433;Database=${SQL_DATABASE};User Id=${SQL_USER};Password=${SQL_PASSWORD};TrustServerCertificate=True;"
+      ConnectionStrings__SaintsDb: "Host=saints-postgres;Database=${POSTGRES_DB:-saintsdb};Username=${POSTGRES_USER:-saintsuser};Password=${POSTGRES_PASSWORD}"
     ports:
       - "5000:5000"
     networks:
@@ -140,32 +146,32 @@ services:
       start_period: 30s
       timeout: 5s
 
-  angular-client-dev:
+  angular_client_dev:
     profiles: ["dev"]
     build:
       context: ./ui/saints-ui
       args:
-        API_BASE_URL: ${API_BASE_URL}
+        API_BASE_URL: ${API_BASE_URL:-http://localhost:5000}
     container_name: angular-client
     ports:
-      - "${ANGULAR_PORT}:4200"
+      - "${ANGULAR_PORT:-4200}:4200"
     networks:
       - saints-net
     depends_on:
-      saints-api-dev:
+      saints_api_dev:
         condition: service_healthy
 
-  angular-client-prod:
+  angular_client_prod:
     profiles: ["prod"]
     image: ghcr.io/arbobeck/saints-angular:latest
-    container_name: angular-client
+    container_name: angular-client-prod
     ports:
-      - "${ANGULAR_PORT}:4200"
+      - "${ANGULAR_PORT:-4200}:4200"
     networks:
       - saints-net
     environment:
       API_BASE_URL: "http://localhost:5000"
     restart: unless-stopped
     depends_on:
-      saints-api-prod:
+      saints_api_prod:
         condition: service_healthy

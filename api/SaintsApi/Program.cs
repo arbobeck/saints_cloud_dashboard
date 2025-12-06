@@ -3,11 +3,14 @@ using SaintsApi.Data;
 using SaintsApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
-
 builder.Services.AddDbContext<SaintsDbContext>(options =>
-    options.UseSqlServer(
+    options.UseNpgsql(
         builder.Configuration.GetConnectionString("SaintsDb"),
-        sqlOptions => sqlOptions.EnableRetryOnFailure(10, TimeSpan.FromSeconds(5), null)
+        npgsqlOptions => npgsqlOptions.EnableRetryOnFailure(
+            maxRetryCount: 10, 
+            maxRetryDelay: TimeSpan.FromSeconds(5), 
+            errorCodesToAdd: null
+        )
     )
 );
 
@@ -15,7 +18,7 @@ builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
     {
-        policy.WithOrigins("http://localhost:4200")
+        policy.WithOrigins("http://localhost:4200", "https://byzantica.org", "https://www.byzantica.org")
               .AllowAnyHeader()
               .AllowAnyMethod();
     });

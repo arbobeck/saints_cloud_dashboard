@@ -1,24 +1,36 @@
 using Microsoft.EntityFrameworkCore;
 using SaintsApi.Models;
 
-namespace SaintsApi.Data
+namespace SaintsApi.Data;
+
+public class SaintsDbContext : DbContext
 {
-    public class SaintsDbContext : DbContext
+    public SaintsDbContext(DbContextOptions<SaintsDbContext> options) : base(options)
     {
-        public SaintsDbContext(DbContextOptions<SaintsDbContext> options)
-            : base(options) { }
+    }
 
-        public DbSet<Saint> Saints { get; set; }
-        public DbSet<History> History { get; set; }
+    public DbSet<Saint> Saints { get; set; }
+    public DbSet<History> History { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<Saint>(entity =>
         {
-            base.OnModelCreating(modelBuilder);
+            entity.ToTable("Saints");
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.Name).IsRequired();
+            entity.Property(e => e.FeastDay).HasColumnType("date").IsRequired();
+            entity.Property(e => e.Patronages).IsRequired();
+        });
 
-            // Explicitly configure Patronages as a regular string, not JSON
-            modelBuilder.Entity<Saint>()
-                .Property(s => s.Patronages)
-                .HasColumnType("nvarchar(max)");
-        }
+        modelBuilder.Entity<History>(entity =>
+        {
+            entity.ToTable("History");
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.Name).IsRequired();
+            entity.Property(e => e.Year).IsRequired();
+        });
     }
 }
