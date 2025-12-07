@@ -16,11 +16,19 @@ builder.Services.AddDbContext<SaintsDbContext>(options =>
 
 builder.Services.AddCors(options =>
 {
-    options.AddDefaultPolicy(policy =>
+    options.AddPolicy("AllowAngular", policy =>
     {
-        policy.WithOrigins("http://localhost:4200", "https://byzantica.org", "https://www.byzantica.org", "https://byzantica.netlify.app")
-              .AllowAnyHeader()
-              .AllowAnyMethod();
+        policy.WithOrigins(
+            "http://localhost:4200",
+            "https://byzantica.org",
+            "https://www.byzantica.org",
+            "https://byzantica.netlify.app",
+            "http://byzantica.org",
+            "http://www.byzantica.org",
+            "http://byzantica.netlify.app"
+        )
+        .AllowAnyHeader()
+        .AllowAnyMethod();
     });
 });
 
@@ -29,7 +37,7 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-app.UseCors();
+app.UseCors("AllowAngular");
 app.UseSwagger();
 app.UseSwaggerUI();
 
