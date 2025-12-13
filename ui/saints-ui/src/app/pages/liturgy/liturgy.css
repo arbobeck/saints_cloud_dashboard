@@ -37,6 +37,7 @@
   overflow-x: auto;
   padding-right: 0.5rem;
   -webkit-overflow-scrolling: touch;
+  margin-top: 0.5rem;
 }
 
 .liturgy-page h1,
@@ -58,7 +59,7 @@
 .collapsible-header {
   cursor: pointer;
   display: flex;
-  align-items: center;
+  align-items: end;
   justify-content: space-between;
   font-weight: bold;
   user-select: none;
@@ -74,7 +75,6 @@
   overflow: hidden;
   transition: max-height 0.5s ease, opacity 0.5s ease;
   opacity: 0;
-  margin-top: 0.5rem;
 }
 
 .collapsible-content.show {
