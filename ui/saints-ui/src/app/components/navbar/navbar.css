@@ -52,6 +52,11 @@
     flex: 0 0 auto;
   }
 
+  /* Hide home link on mobile */
+  .nav-links li:first-child {
+    display: none;
+  }
+
   .nav-logo {
     font-size: 1rem;
   }

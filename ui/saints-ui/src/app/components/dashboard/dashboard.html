@@ -1,10 +1,15 @@
 <div class="dashboard-container">
-  <h1>Byzantine Saints & Feast Days</h1>
+  <h1>Russian Greek Catholic Calendar</h1>
 
-  <!-- Saints Table -->
-  <section class="saints-section">
+  <section>
     <h2>Saints</h2>
-    <table>
+    <div *ngIf="loadingSaints" class="spinner-cell">
+      <app-loading-spinner></app-loading-spinner>
+    </div>
+    <div *ngIf="errorSaints">
+      <app-error-message [message]="errorSaints"></app-error-message>
+    </div>
+    <table *ngIf="!loadingSaints && !errorSaints">
       <thead>
         <tr>
           <th>ID</th>
@@ -14,38 +19,25 @@
         </tr>
       </thead>
       <tbody>
-  <!-- Loading Spinner Row -->
-  <tr *ngIf="loadingSaints">
-    <td colspan="4" class="spinner-cell">
-      <app-loading-spinner></app-loading-spinner>
-    </td>
-  </tr>
-
-  <!-- Error Message Row -->
-  <tr *ngIf="errorSaints">
-    <td colspan="4">
-      <app-error-message [message]="errorSaints"></app-error-message>
-    </td>
-  </tr>
-
-  <!-- Data Rows -->
-  <ng-container *ngIf="!loadingSaints && !errorSaints">
-    <tr *ngFor="let saint of saints">
-      <td>{{ saint.id }}</td>
-      <td>{{ saint.name }}</td>
-      <td>{{ saint.feastDay | date:'longDate' }}</td>
-      <td>{{ saint.patronages }}</td>
-    </tr>
-  </ng-container>
-</tbody>
-
+        <tr *ngFor="let saint of saints">
+          <td data-label="ID">{{ saint.id }}</td>
+          <td data-label="Name">{{ saint.name }}</td>
+          <td data-label="Feast Day">{{ saint.feastDay | date }}</td>
+          <td data-label="Patronage">{{ saint.patronages }}</td>
+        </tr>
+      </tbody>
     </table>
   </section>
 
-  <!-- History Table -->
-  <section class="history-section">
+  <section>
     <h2>Byzantine Church History</h2>
-    <table>
+    <div *ngIf="loadingHistory" class="spinner-cell">
+      <app-loading-spinner></app-loading-spinner>
+    </div>
+    <div *ngIf="errorHistory">
+      <app-error-message [message]="errorHistory"></app-error-message>
+    </div>
+    <table *ngIf="!loadingHistory && !errorHistory">
       <thead>
         <tr>
           <th>ID</th>
@@ -53,30 +45,13 @@
           <th>Year</th>
         </tr>
       </thead>
- <tbody>
-  <!-- Loading Spinner Row -->
-  <tr *ngIf="loadingHistory">
-    <td colspan="3" class="spinner-cell">
-      <app-loading-spinner></app-loading-spinner>
-    </td>
-  </tr>
-
-  <!-- Error Message Row -->
-  <tr *ngIf="errorHistory">
-    <td colspan="3">
-      <app-error-message [message]="errorHistory"></app-error-message>
-    </td>
-  </tr>
-
-  <!-- Data Rows -->
-  <ng-container *ngIf="!loadingHistory && !errorHistory">
-    <tr *ngFor="let h of history">
-      <td>{{ h.id }}</td>
-      <td>{{ h.name }}</td>
-      <td>{{ h.year }}</td>
-    </tr>
-  </ng-container>
-</tbody>
+      <tbody>
+        <tr *ngFor="let item of history">
+          <td data-label="ID">{{ item.id }}</td>
+          <td data-label="Name">{{ item.name }}</td>
+          <td data-label="Year">{{ item.year }}</td>
+        </tr>
+      </tbody>
     </table>
   </section>
 </div>

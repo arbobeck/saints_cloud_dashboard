@@ -1,7 +1,7 @@
 # Byzantica
 
 ## Overview
-A web app that displays information about saints, feast days, and Byzantine Catholicism.
+A web app that displays information about saints, feast days, and the Russian Greek Catholic Church.
 
 **Technologies & Practices:**
 - DevOps, Azure Security, CI/CD
@@ -52,7 +52,3 @@ From the root directory (/saints_cloud_dashboard):
 ```bash
 docker compose --profile prod up -d
 ```
-
-## Next Steps
-1. Set up Single-Sign-On (SSO)
-2. Add caching layer between server and database (Azure alternative to Redis)
