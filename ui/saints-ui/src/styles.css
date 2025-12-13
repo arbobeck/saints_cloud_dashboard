@@ -1,7 +1,28 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  overflow-x: hidden;
+}
+
 body {
   min-height: 100vh;
   background-image: url('/assets/background/byzantica-bg.png');
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
+  background-repeat: no-repeat;
+}
+
+/* Fix background on mobile devices where fixed attachment causes issues */
+@media (max-width: 768px) {
+  body {
+    background-attachment: scroll;
+    background-size: cover;
+  }
+}
+
+/* Ensure all content respects viewport width */
+* {
+  box-sizing: border-box;
 }

@@ -1,6 +1,8 @@
 .dashboard-container {
   padding: 20px;
   font-family: Arial, sans-serif;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 h1, h2 {
@@ -8,15 +10,20 @@ h1, h2 {
 }
 
 table {
-  width: 80%;
+  width: 100%;
+  max-width: 80%;
   margin: 10px auto;
   border-collapse: collapse;
+  display: block;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 th, td {
   border: 1px solid #ddd;
   padding: 8px;
   text-align: left;
+  white-space: nowrap;
 }
 
 th {
@@ -35,4 +42,39 @@ section {
 .spinner-cell {
   text-align: center;
   padding: 2rem 0;
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
+  .dashboard-container {
+    padding: 10px;
+  }
+
+  table {
+    max-width: 100%;
+    font-size: 0.9rem;
+  }
+
+  th, td {
+    padding: 6px;
+  }
+}
+
+@media (max-width: 480px) {
+  table {
+    font-size: 0.8rem;
+  }
+
+  th, td {
+    padding: 4px;
+    font-size: 0.75rem;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  h2 {
+    font-size: 1.2rem;
+  }
 }
