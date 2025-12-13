@@ -14,11 +14,12 @@ body {
   background-repeat: no-repeat;
 }
 
-/* Fix background on mobile devices where fixed attachment causes issues */
+/* Fix background on mobile devices */
 @media (max-width: 768px) {
   body {
     background-attachment: scroll;
     background-size: cover;
+    background-position: center center; /* Keep centered */
   }
 }
 

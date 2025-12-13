@@ -22,7 +22,7 @@ import { CommonModule } from '@angular/common';
     }
     .spinner {
       border: 4px solid rgba(0,0,0,0.1);
-      border-left-color: #4f46e5;
+      border-left-color: #593c18;
       border-radius: 50%;
       width: 3rem;
       height: 3rem;

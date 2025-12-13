@@ -47,6 +47,10 @@ tr:nth-child(even) {
     padding: 10px;
   }
 
+  h2 {
+    text-align: center;
+  }
+
   table {
     max-width: 100%;
   }
@@ -65,22 +69,25 @@ tr:nth-child(even) {
 
   tr {
     margin-bottom: 1rem;
-    border: 1px solid #ddd;
+    border: 1px solid #593c18;
     border-radius: 8px;
     overflow: hidden;
-    background-color: white;
+    background-color: rgba(167, 156, 105, 0.85); /* Sandal with transparency */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
   }
 
   tr:nth-child(even) {
-    background-color: #f9f9f9;
+    background-color: rgba(193, 131, 64, 0.85); /* Tussock with transparency */
   }
 
   td {
     border: none;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid rgba(89, 60, 24, 0.3);
     position: relative;
     padding: 0.75rem 0.75rem 0.75rem 45%;
     text-align: left;
+    color: #1d1d1d;
   }
 
   td:last-child {
@@ -95,7 +102,7 @@ tr:nth-child(even) {
     padding-right: 10px;
     white-space: nowrap;
     font-weight: bold;
-    color: #593c18;
+    color: #593c18; /* Punga */
   }
 }
 
@@ -106,6 +113,7 @@ tr:nth-child(even) {
 
   h2 {
     font-size: 1.2rem;
+    text-align: center;
   }
 
   td {
