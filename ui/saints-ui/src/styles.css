@@ -5,21 +5,41 @@ html, body {
   overflow-x: hidden;
 }
 
+html {
+  height: 100%;
+}
+
 body {
-  min-height: 110%;
+  min-height: 100%;
   position: relative;
 }
 
 body::before {
-    content: '';
-    position: fixed;
-    inset: -10em;
-    background-image: url('/assets/background/byzantica-bg.png');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    z-index: -1;
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  background-image: url('/assets/background/byzantica-bg.png');
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  z-index: -1;
+  transform: translateZ(0);
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+/* Mobile-specific fix */
+@media (max-width: 768px) {
+  body::before {
+    height: 100svh; /* Uses small viewport height to account for mobile browsers */
   }
+}
 
 * {
   box-sizing: border-box;
