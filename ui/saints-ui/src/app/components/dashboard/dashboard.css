@@ -77,7 +77,7 @@ tr:nth-child(even) {
   }
 
   tr:nth-child(even) {
-    background-color: rgba(193, 131, 64, 0.85);
+    background-color: #593c18;
   }
 
   td {
