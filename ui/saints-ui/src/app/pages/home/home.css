@@ -11,15 +11,11 @@
   -webkit-backdrop-filter: blur(8px);
   padding: 2rem;
   border-radius: 12px;
+  text-align: center;
 }
 
-.home-container h1,
-.home-container h3 {
+.home-container h1 {
   margin-bottom: 1rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
 }
 
 .home-container p {
