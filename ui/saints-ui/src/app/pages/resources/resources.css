@@ -5,6 +5,22 @@
   font-family: sans-serif;
 }
 
+.page {
+  min-height: 100vh;
+  background-image: url('/assets/backgrounds/byzantica-bg.png');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+.content-overlay {
+  background-color: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 2rem;
+  border-radius: 12px;
+}
+
 .resources-page h1,
 .resources-page h2 {
   text-align: center;

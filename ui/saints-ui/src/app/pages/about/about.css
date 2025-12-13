@@ -7,6 +7,21 @@
   text-align: left;
 }
 
+.page-background {
+  min-height: 100vh;
+  background-image: url('/assets/backgrounds/byzantine-bg.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+.content-overlay {
+  background-color: rgba(0, 0, 0, 0.55); /* dark glass */
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 2rem;
+  border-radius: 12px;
+}
+
 .about-page h1 {
   margin-bottom: 1rem;
   text-align: center;
