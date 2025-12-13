@@ -5,6 +5,21 @@
   font-family: sans-serif;
 }
 
+.page-background {
+  min-height: 100vh;
+  background-image: url('/assets/background/byzantica-bg.png');
+  background-size: cover;
+  background-position: center;
+}
+
+.content-overlay {
+  background-color: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 2rem;
+  border-radius: 12px;
+}
+
 .liturgy-page h1,
 .liturgy-page h2 {
   text-align: center;
