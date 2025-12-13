@@ -20,12 +20,12 @@ th, td {
 }
 
 th {
-  background-color: #c97149;
+  background-color: #593c18;
   color: white;
 }
 
 tr:nth-child(even) {
-  background-color: #f2f2f2;
+  background-color: #a79c69;
 }
 
 section {

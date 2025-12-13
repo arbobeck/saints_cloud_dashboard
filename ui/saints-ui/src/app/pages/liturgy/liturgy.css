@@ -6,11 +6,31 @@
 }
 
 .content-overlay {
-  background-color: rgba(0, 0, 0, 0.55);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  position: relative;
   padding: 2rem;
   border-radius: 12px;
+  overflow: hidden;
+}
+
+.content-overlay::before {
+  content: '';
+  position: absolute;
+  top:0; left:0; right:0; bottom:0;
+  background-color: rgba(255,255,255,0.15);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  z-index: 0;
+}
+
+.content-overlay > * {
+  position: relative;
+  z-index: 1; /* content stays above the blur layer */
+}
+
+.content-scroll {
+  max-height: 300px; /* adjust height as needed */
+  overflow-y: auto;  /* vertical scrollbar if content exceeds height */
+  padding-right: 0.5rem; /* optional: prevent content hiding behind scrollbar */
 }
 
 .liturgy-page h1,
@@ -27,4 +47,51 @@
 .liturgy-page ul {
   margin-bottom: 1rem;
   padding-left: 1.5rem;
+}
+
+/* Collapsible header */
+.collapsible-header {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: bold;
+  user-select: none;
+}
+
+/* Arrow rotation */
+.collapsible-header .arrow {
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+
+/* Hidden content initially */
+.collapsible-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s ease, opacity 0.5s ease;
+  opacity: 0;
+  margin-top: 0.5rem;
+}
+
+/* Expanded state */
+.collapsible-content.show {
+  opacity: 1;
+  max-height: 500px; /* adjust if needed */
+}
+
+.collapsible-content table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.collapsible-content th,
+.collapsible-content td {
+  border: 1px solid #ddd;
+  padding: 0.5rem;
+  text-align: left;
+}
+
+.collapsible-content th {
+  background-color: rgba(255, 255, 255, 0.25);
 }

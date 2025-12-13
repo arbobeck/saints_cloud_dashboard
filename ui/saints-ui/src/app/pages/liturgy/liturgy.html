@@ -1,26 +1,48 @@
 <div class="liturgy-page">
   <div class="content-overlay">
-  <h1>Russian Greek Catholic Liturgy</h1>
-  <p>
-    Explore the rich liturgical life of the Byzantine Catholic Church, including the Divine Liturgy,
-    canonical hours, and special feasts.
-  </p>
-  <p>
-    Learn about the structure of services, prayers, hymns, and the symbolism behind the rituals.
-  </p>
+    <h1>Russian Greek Catholic Liturgy</h1>
+    <p>
+      Explore the rich liturgical life of the Byzantine Catholic Church, including the Divine Liturgy,
+      canonical hours, and special feasts.
+    </p>
+    <p>
+      Learn about the structure of services, prayers, hymns, and the symbolism behind the rituals.
+    </p>
 
-  <h2>Services</h2>
-  <ul>
-    <li>Divine Liturgy</li>
-    <li>Vespers</li>
-    <li>Matins</li>
-    <li>Compline</li>
-    <li>Other Daily Services</li>
-  </ul>
+    <h2>Services</h2>
+    <ul>
+      <li>Divine Liturgy</li>
+      <li>Vespers</li>
+      <li>
+        <div class="collapsible-header" (click)="toggleMatins()">
+          Matins <span class="arrow" [style.transform]="matinsOpen ? 'rotate(90deg)' : 'rotate(0deg)'">▶</span>
+        </div>
+        <div class="collapsible-content" [class.show]="matinsOpen">
+          <div class="content-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Church Slavic</th>
+                <th>English</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of matinsTable">
+                <td>{{ row.churchSlavic }}</td>
+                <td>{{ row.english }}</td>
+              </tr>
+            </tbody>
+          </table>
+          </div>
+        </div>
+      </li>
+      <li>Compline</li>
+      <li>Other Daily Services</li>
+    </ul>
 
-  <h2>Resources</h2>
-  <p>
-    Access prayers, liturgical texts, and guides to participate meaningfully in services.
-  </p>
+    <h2>Resources</h2>
+    <p>
+      Access prayers, liturgical texts, and guides to participate meaningfully in services.
+    </p>
   </div>
 </div>
