@@ -33,12 +33,12 @@ th, td {
 }
 
 th {
-  background-color: #593c18;
+  background-color: #593c1850;
   color: white;
 }
 
 tr:nth-child(even) {
-  background-color: #a79c69;
+  background-color: #a79c6950;
 }
 
 /* Tablet and below - make tables responsive */
@@ -69,7 +69,7 @@ tr:nth-child(even) {
 
   tr {
     margin-bottom: 1rem;
-    border: 1px solid #593c18;
+    border: 1px solid #593c1850;
     border-radius: 8px;
     overflow: hidden;
     backdrop-filter: blur(10px);

@@ -12,7 +12,6 @@
     <table *ngIf="!loadingSaints && !errorSaints">
       <thead>
         <tr>
-          <th>ID</th>
           <th>Name</th>
           <th>Feast Day</th>
           <th>Patronage</th>
@@ -20,7 +19,6 @@
       </thead>
       <tbody>
         <tr *ngFor="let saint of saints">
-          <td data-label="ID">{{ saint.id }}</td>
           <td data-label="Name">{{ saint.name }}</td>
           <td data-label="Feast Day">{{ saint.feastDay | date }}</td>
           <td data-label="Patronage">{{ saint.patronages }}</td>
@@ -47,7 +45,6 @@
       </thead>
       <tbody>
         <tr *ngFor="let item of history">
-          <td data-label="ID">{{ item.id }}</td>
           <td data-label="Name">{{ item.name }}</td>
           <td data-label="Year">{{ item.year }}</td>
         </tr>
