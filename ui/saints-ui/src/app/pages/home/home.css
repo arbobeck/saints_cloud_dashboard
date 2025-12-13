@@ -7,7 +7,7 @@
 
 .page {
   min-height: 100vh;
-  background-image: url('/assets/background/byzantica-bg.png');
+  background-image: url('../assets/background/byzantica-bg.png');
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
@@ -21,7 +21,8 @@
   border-radius: 12px;
 }
 
-.home-container h1 {
+.home-container h1,
+.home-container h2 {
   margin-bottom: 1rem;
   display: flex;
   flex-direction: column;
