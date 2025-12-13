@@ -72,13 +72,12 @@ tr:nth-child(even) {
     border: 1px solid #593c18;
     border-radius: 8px;
     overflow: hidden;
-    background-color: rgba(167, 156, 105, 0.85); /* Sandal with transparency */
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
   }
 
   tr:nth-child(even) {
-    background-color: rgba(193, 131, 64, 0.85); /* Tussock with transparency */
+    background-color: rgba(193, 131, 64, 0.85);
   }
 
   td {
@@ -102,7 +101,7 @@ tr:nth-child(even) {
     padding-right: 10px;
     white-space: nowrap;
     font-weight: bold;
-    color: #593c18; /* Punga */
+    color: #593c18;
   }
 }
 

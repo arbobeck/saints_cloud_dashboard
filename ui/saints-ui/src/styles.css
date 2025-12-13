@@ -14,16 +14,14 @@ body {
   background-repeat: no-repeat;
 }
 
-/* Fix background on mobile devices */
 @media (max-width: 768px) {
   body {
-    background-attachment: scroll;
+    background-attachment: fixed;
     background-size: cover;
-    background-position: center center; /* Keep centered */
+    background-position: center center;
   }
 }
 
-/* Ensure all content respects viewport width */
 * {
   box-sizing: border-box;
 }
