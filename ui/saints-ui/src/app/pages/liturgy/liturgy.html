@@ -1,48 +1,65 @@
 <div class="liturgy-page">
   <div class="content-overlay">
-    <h1>Russian Greek Catholic Liturgy</h1>
+    <h1>Chasoslov (Часослов) - Prayer Book</h1>
     <p>
-      Explore the rich liturgical life of the Russian Greek Catholic Church, including the Divine Liturgy,
-      canonical hours, and special feasts.
+      Daily prayers and services from the Byzantine tradition.
     </p>
-    <p>
-      Learn about the structure of services, prayers, hymns, and the symbolism behind the rituals.
-    </p>
-
-    <h2>Services</h2>
-    <ul>
-      <li>Divine Liturgy</li>
-      <li>Vespers</li>
+    
+    <h2>Daily Services</h2>
+    <ul class="service-list">
       <li>
         <div class="collapsible-header" (click)="toggleMatins()">
-          Matins <span class="arrow" [style.transform]="matinsOpen ? 'rotate(90deg)' : 'rotate(0deg)'">▶</span>
+          Matins (Утреня - Utrennyaya) <span class="arrow" [style.transform]="matinsOpen ? 'rotate(90deg)' : 'rotate(0deg)'">▶</span>
         </div>
         <div class="collapsible-content" [class.show]="matinsOpen">
           <div class="content-scroll">
-          <table>
-            <thead>
-              <tr>
-                <th>Church Slavic</th>
-                <th>English</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let row of matinsTable">
-                <td data-label="Church Slavic">{{ row.churchSlavic }}</td>
-                <td data-label="English">{{ row.english }}</td>
-              </tr>
-            </tbody>
-          </table>
+            <table>
+              <thead>
+                <tr>
+                  <th>Church Slavonic</th>
+                  <th>English</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let row of matinsTable">
+                  <td data-label="Church Slavonic">{{ row.churchSlavic }}</td>
+                  <td data-label="English">{{ row.english }}</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </li>
-      <li>Compline</li>
-      <li>Other Daily Services</li>
+      <li>
+        <div class="collapsible-header">
+          Vespers (Вечерня - Vechernya)
+        </div>
+      </li>
+      <li>
+        <div class="collapsible-header">
+          Compline (Повечерие - Povecherie)
+        </div>
+      </li>
+      <li>
+        <div class="collapsible-header">
+          First Hour (Первый Час - Pervyy Chas)
+        </div>
+      </li>
+      <li>
+        <div class="collapsible-header">
+          Third Hour (Третий Час - Tretiy Chas)
+        </div>
+      </li>
+      <li>
+        <div class="collapsible-header">
+          Sixth Hour (Шестой Час - Shestoy Chas)
+        </div>
+      </li>
+      <li>
+        <div class="collapsible-header">
+          Ninth Hour (Девятый Час - Devyatyy Chas)
+        </div>
+      </li>
     </ul>
-
-    <h2>Resources</h2>
-    <p>
-      Access prayers, liturgical texts, and guides to participate meaningfully in services.
-    </p>
   </div>
 </div>
