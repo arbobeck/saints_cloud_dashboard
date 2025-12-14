@@ -17,7 +17,7 @@ body {
 /* Fix background on mobile devices */
 @media (max-width: 768px) {
   body {
-    background-attachment: scroll;
+    background-attachment: fixed;
     background-size: cover;
     background-position: center center; /* Keep centered */
   }
