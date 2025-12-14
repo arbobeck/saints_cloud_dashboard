@@ -6,21 +6,24 @@ html, body {
 }
 
 body {
-  min-height: 100%;
-  position: relative;
+  min-height: 100vh;
+  background-image: url('/assets/background/byzantica-bg.png');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
 }
 
-body::before {
-    content: '';
-    position: fixed;
-    inset: -10em;
-    background-image: url('/assets/background/byzantica-bg.png');
+/* Fix background on mobile devices */
+@media (max-width: 768px) {
+  body {
+    background-attachment: scroll;
     background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    z-index: -1;
+    background-position: center center; /* Keep centered */
   }
+}
 
+/* Ensure all content respects viewport width */
 * {
   box-sizing: border-box;
 }
