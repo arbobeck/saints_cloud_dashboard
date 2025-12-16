@@ -1,0 +1,48 @@
+<div class="page-container">
+  <div class="content-card">
+    <h1>System Status</h1>
+    
+    <div class="overall-status">
+      <div class="status-header">
+        <h2>Overall System Status</h2>
+        <span class="status-badge status-online">All Systems Operational</span>
+      </div>
+      <div class="uptime-stat">
+        <span class="uptime-label">Overall Uptime</span>
+        <span class="uptime-value">{{ overallUptime | number:'1.2-2' }}%</span>
+      </div>
+    </div>
+
+    <div class="services-list">
+      <h2>Service Status</h2>
+      
+      <div class="service-item" *ngFor="let service of services">
+        <div class="service-info">
+          <div class="service-name">{{ service.service }}</div>
+          <div class="service-meta">
+            <span [class]="getStatusClass(service.status)">
+              {{ getStatusText(service.status) }}
+            </span>
+          </div>
+        </div>
+        <div class="service-stats">
+          <div class="stat">
+            <span class="stat-label">Uptime</span>
+            <span class="stat-value">{{ service.uptime }}%</span>
+          </div>
+          <div class="stat">
+            <span class="stat-label">Last Checked</span>
+            <span class="stat-value">{{ service.lastChecked | date:'short' }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="status-footer">
+      <p>
+        <strong>Note:</strong> This page displays the current operational status of our services. 
+        If you're experiencing issues not reflected here, please contact support.
+      </p>
+    </div>
+  </div>
+</div>
