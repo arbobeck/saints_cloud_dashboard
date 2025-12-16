@@ -58,6 +58,7 @@ body {
       );
 
     background-blend-mode: overlay;
+    box-shadow: inset 0 0 120px rgba(255, 215, 140, 0.08);
   }
 }
 
