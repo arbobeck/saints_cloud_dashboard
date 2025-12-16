@@ -30,8 +30,10 @@
 
 .nav-logo {
   font-weight: bold;
-  font-size: 1.2rem;
+  font-size: 1.7rem;
   color: #c18340;
+  font-family: 'Playfair Display', serif;
+}
 }
 
 /* Mobile styles */
