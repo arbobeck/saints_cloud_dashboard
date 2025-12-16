@@ -20,11 +20,7 @@ body {
   body {
     background-attachment: fixed;
     background-size: cover;
-    background-position: center center; /* Keep centered */
+    background-position: center center;
+    background-image: url('/assets/background/byzantica-bg.png');
   }
-}
-
-/* Ensure all content respects viewport width */
-* {
-  box-sizing: border-box;
 }
