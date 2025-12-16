@@ -1,8 +1,3 @@
-/* Ensure all content respects viewport width */
-* {
-  box-sizing: border-box;
-}
-
 html, body {
   margin: 0;
   padding: 0;
@@ -13,6 +8,7 @@ html, body {
 
 body {
   min-height: 100vh;
+  inset: -10em;
   background-image: url('/assets/background/byzantica-bg.png');
   background-size: cover;
   background-position: center;
@@ -30,39 +26,42 @@ body {
   flex: 1;
 }
 
-/* Mobile background fix - use scroll instead of fixed */
 @media (max-width: 768px) {
-  /* Create a pseudo-element for the background to avoid mobile issues */
-  body::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: url('/assets/background/byzantica-bg.png');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    z-index: -1;
-  }
-  
-  body {
-    background-image: none;
-    background-attachment: scroll;
-  }
-}
-
-/* Alternative: Hide background on very small screens if issues persist */
-@media (max-width: 480px) {
-  /* Uncomment below if you want to remove background on small phones */
-  /*
   body::before {
     display: none;
   }
-  
+
   body {
-    background-color: #1a1a1a;
+    background-color: #593c18;
+    background-image:
+      /* gold noise */
+      repeating-radial-gradient(
+        circle at 20% 30%,
+        rgba(193, 131, 64, 0.12),
+        rgba(193, 131, 64, 0.12) 0.5px,
+        transparent 0.8px,
+        transparent 2px
+      ),
+      repeating-radial-gradient(
+        circle at 70% 60%,
+        rgba(255, 215, 140, 0.08),
+        rgba(255, 215, 140, 0.08) 0.5px,
+        transparent 0.8px,
+        transparent 2.5px
+      ),
+      /* base gradient */
+      linear-gradient(
+        180deg,
+        #593c18 0%,
+        #c18340 55%,
+        #a79c69 100%
+      );
+
+    background-blend-mode: overlay;
   }
-  */
+}
+
+/* Ensure all content respects viewport width */
+* {
+  box-sizing: border-box;
 }
