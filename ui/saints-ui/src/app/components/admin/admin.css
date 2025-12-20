@@ -1,11 +1,11 @@
-.dashboard-container {
+.admin-container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
   min-height: 100vh;
 }
 
-.dashboard-header {
+.admin-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -14,7 +14,7 @@
   gap: 1rem;
 }
 
-.dashboard-header h1 {
+.admin-header h1 {
   color: #c18340;
   margin: 0;
   font-size: 2rem;
@@ -198,7 +198,7 @@
     grid-template-columns: 1fr;
   }
 
-  .dashboard-content {
+  .admin-content {
     padding: 1rem;
   }
 }
