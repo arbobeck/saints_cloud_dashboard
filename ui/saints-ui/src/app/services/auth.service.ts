@@ -18,7 +18,7 @@ export interface LoginResponse {
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'https://your-render-api.onrender.com/api'; // Replace with your Render URL
+  private apiUrl = 'https://saints-api-dzwz.onrender.com';
   private tokenKey = 'byzantica_admin_token';
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(this.hasToken());
 
