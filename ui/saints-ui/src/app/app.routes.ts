@@ -22,11 +22,11 @@ export const routes: Routes = [
   { path: 'impressum', component: Impressum },
   { path: 'datenschutz', component: Datenschutz },
   { path: 'uptime', component: Uptime },
-  { path: '**', redirectTo: '' },
   { path: 'admin/login', component: LoginComponent },
   { path: 'admin/dashboard', component: AdminComponent, canActivate: [authGuard] },
   { path: 'admin/editor', component: EditorComponent, canActivate: [authGuard] },
-  { path: 'admin/editor/:id', component: EditorComponent, canActivate: [authGuard] }
+  { path: 'admin/editor/:id', component: EditorComponent, canActivate: [authGuard] },
+  { path: '**', redirectTo: '' }
 ];
 
 

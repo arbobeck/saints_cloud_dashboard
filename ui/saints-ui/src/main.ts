@@ -7,6 +7,6 @@ import { routes } from './app/app.routes';
 bootstrapApplication(App, {
   providers: [
     provideHttpClient(withInterceptorsFromDi()),
-    provideRouter(routes) // ✅ add this
+    provideRouter(routes)
   ]
 }).catch(err => console.error(err));
