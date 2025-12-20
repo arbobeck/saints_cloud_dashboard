@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-echo "Deploying Saints Dashboard..."
+echo "Deploying Byzantica..."
 
 # Build and push API
 echo "Building API..."

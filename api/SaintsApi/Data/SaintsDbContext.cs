@@ -11,6 +11,8 @@ public class SaintsDbContext : DbContext
 
     public DbSet<Saint> Saints { get; set; }
     public DbSet<History> History { get; set; }
+    public DbSet<AdminUser> AdminUsers { get; set; }
+    public DbSet<BlogDraft> BlogDrafts { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -32,5 +34,7 @@ public class SaintsDbContext : DbContext
             entity.Property(e => e.Name).IsRequired();
             entity.Property(e => e.Year).IsRequired();
         });
+        modelBuilder.Entity<AdminUser>().ToTable("AdminUser");
+        modelBuilder.Entity<BlogDraft>().ToTable("BlogDrafts");
     }
 }

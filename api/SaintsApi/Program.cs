@@ -1,8 +1,13 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using SaintsApi.Data;
 using SaintsApi.Models;
+using SaintsApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+
 builder.Services.AddDbContext<SaintsDbContext>(options =>
     options.UseNpgsql(
         builder.Configuration.GetConnectionString("SaintsDb"),
@@ -13,6 +18,28 @@ builder.Services.AddDbContext<SaintsDbContext>(options =>
         )
     )
 );
+
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IBlogService, BlogService>();
+
+// JWT Authentication
+var jwtKey = builder.Configuration["Jwt:Key"] ?? "YourSuperSecretKeyHere_ChangeThis_MinimumLength32Characters!";
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"] ?? "ByzanticaApi",
+            ValidAudience = builder.Configuration["Jwt:Audience"] ?? "ByzanticaApp",
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
+        };
+    });
+
+builder.Services.AddAuthorization();
 
 builder.Services.AddCors(options =>
 {
@@ -28,10 +55,12 @@ builder.Services.AddCors(options =>
             "http://byzantica.netlify.app"
         )
         .AllowAnyHeader()
-        .AllowAnyMethod();
+        .AllowAnyMethod()
+        .AllowCredentials();
     });
 });
 
+builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -40,6 +69,9 @@ var app = builder.Build();
 app.UseCors("AllowAngular");
 app.UseSwagger();
 app.UseSwaggerUI();
+app.UseAuthentication();
+app.UseAuthorization();
+app.MapControllers();
 
 app.MapGet("/api/saints", async (SaintsDbContext db) =>
 {

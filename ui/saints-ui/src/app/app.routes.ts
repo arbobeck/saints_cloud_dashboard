@@ -9,6 +9,11 @@ import { Impressum } from './pages/impressum/impressum';
 import { Datenschutz } from './pages/datenschutz/datenschutz';
 import { Uptime } from './pages/uptime/uptime';
 
+import { LoginComponent } from './components/login/login';
+import { AdminComponent } from './components/admin/admin';
+import { EditorComponent } from './components/editor/editor';
+import { authGuard } from './guards/auth.guard';
+
 export const routes: Routes = [
   { path: '', component: Home },
   { path: 'about', component: About },
@@ -18,6 +23,28 @@ export const routes: Routes = [
   { path: 'datenschutz', component: Datenschutz },
   { path: 'uptime', component: Uptime },
   { path: '**', redirectTo: '' }
+];
+
+export const adminRoutes = [
+  {
+    path: 'admin/login',
+    component: LoginComponent
+  },
+  {
+    path: 'admin/dashboard',
+    component: AdminComponent,
+    canActivate: [authGuard]
+  },
+  {
+    path: 'admin/editor',
+    component: EditorComponent,
+    canActivate: [authGuard]
+  },
+  {
+    path: 'admin/editor/:id',
+    component: EditorComponent,
+    canActivate: [authGuard]
+  }
 ];
 
 @NgModule({
