@@ -1,16 +1,18 @@
 // src/app/components/error-message/error-message.ts
 import { Component, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 
 @Component({
   selector: 'app-error-message',
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
   template: `
-    <div *ngIf="message" class="error-message">
-      <p>{{ message }}</p>
-    </div>
-  `,
+    @if (message) {
+      <div class="error-message">
+        <p>{{ message }}</p>
+      </div>
+    }
+    `,
   styles: [`
     .error-message {
       color: red;

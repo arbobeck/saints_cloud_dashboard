@@ -2,28 +2,37 @@
   <div class="content-card">
     <h1>Blog</h1>
 
-    <div class="loading" *ngIf="isLoading">
-      Loading posts...
-    </div>
-
-    <div class="error-message" *ngIf="error && !isLoading">
-      {{ error }}
-    </div>
-
-    <div class="blog-posts" *ngIf="!isLoading && !error">
-      <div class="empty-state" *ngIf="posts.length === 0">
-        <p>No blog posts published yet. Check back soon!</p>
+    @if (isLoading) {
+      <div class="loading">
+        Loading posts...
       </div>
+    }
 
-      <article class="blog-post-card" *ngFor="let post of posts">
-        <h2>
-          <a [routerLink]="['/blog', post.slug]">{{ post.title }}</a>
-        </h2>
-        <div class="post-meta">
-          <span class="post-date">{{ formatDate(post.date) }}</span>
-          <span class="post-author">by {{ post.author }}</span>
-        </div>
-      </article>
-    </div>
+    @if (error && !isLoading) {
+      <div class="error-message">
+        {{ error }}
+      </div>
+    }
+
+    @if (!isLoading && !error) {
+      <div class="blog-posts">
+        @if (posts.length === 0) {
+          <div class="empty-state">
+            <p>No blog posts published yet. Check back soon!</p>
+          </div>
+        }
+        @for (post of posts; track post) {
+          <article class="blog-post-card">
+            <h2>
+              <a [routerLink]="['/blog', post.slug]">{{ post.title }}</a>
+            </h2>
+            <div class="post-meta">
+              <span class="post-date">{{ formatDate(post.date) }}</span>
+              <span class="post-author">by {{ post.author }}</span>
+            </div>
+          </article>
+        }
+      </div>
+    }
   </div>
 </div>

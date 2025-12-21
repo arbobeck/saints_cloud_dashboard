@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 
 // Import your dashboard component
 import { DashboardComponent } from '../../components/dashboard/dashboard';
@@ -9,6 +9,6 @@ import { DashboardComponent } from '../../components/dashboard/dashboard';
   templateUrl: './home.html',
   styleUrls: ['./home.css'],
   standalone: true,
-  imports: [CommonModule, DashboardComponent]
+  imports: [DashboardComponent]
 })
 export class Home {}

@@ -12,51 +12,57 @@
   </header>
 
   <div class="admin-content">
-    <div class="loading" *ngIf="isLoading">
-      Loading drafts...
-    </div>
-
-    <div class="error-message" *ngIf="error">
-      {{ error }}
-    </div>
-
-    <div class="drafts-grid" *ngIf="!isLoading && !error">
-      <div class="empty-state" *ngIf="drafts.length === 0">
-        <p>No blog posts yet.</p>
-        <button class="btn-primary" (click)="createNew()">
-          Create Your First Post
-        </button>
+    @if (isLoading) {
+      <div class="loading">
+        Loading drafts...
       </div>
+    }
 
-      <div class="draft-card" *ngFor="let draft of drafts">
-        <div class="draft-header">
-          <h3>{{ draft.title }}</h3>
-          <span class="draft-status" [class.published]="draft.status === 'published'">
-            {{ draft.status }}
-          </span>
-        </div>
-        
-        <div class="draft-meta">
-          <span>Created: {{ formatDate(draft.createdAt) }}</span>
-          <span>Updated: {{ formatDate(draft.updatedAt) }}</span>
-        </div>
-
-        <div class="draft-content-preview">
-          {{ draft.content.substring(0, 150) }}{{ draft.content.length > 150 ? '...' : '' }}
-        </div>
-
-        <div class="draft-actions">
-          <button class="btn-edit" (click)="editDraft(draft.id)">
-            Edit
-          </button>
-          <button class="btn-delete" (click)="deleteDraft(draft.id, draft.title)">
-            Delete
-          </button>
-          <button class="btn-publish" (click)="publishDraft(draft.id, draft.title)">
-            Publish
-          </button>
-        </div>
+    @if (error) {
+      <div class="error-message">
+        {{ error }}
       </div>
-    </div>
+    }
+
+    @if (!isLoading && !error) {
+      <div class="drafts-grid">
+        @if (drafts.length === 0) {
+          <div class="empty-state">
+            <p>No blog posts yet.</p>
+            <button class="btn-primary" (click)="createNew()">
+              Create Your First Post
+            </button>
+          </div>
+        }
+        @for (draft of drafts; track draft) {
+          <div class="draft-card">
+            <div class="draft-header">
+              <h3>{{ draft.title }}</h3>
+              <span class="draft-status" [class.published]="draft.status === 'published'">
+                {{ draft.status }}
+              </span>
+            </div>
+            <div class="draft-meta">
+              <span>Created: {{ formatDate(draft.createdAt) }}</span>
+              <span>Updated: {{ formatDate(draft.updatedAt) }}</span>
+            </div>
+            <div class="draft-content-preview">
+              {{ draft.content.substring(0, 150) }}{{ draft.content.length > 150 ? '...' : '' }}
+            </div>
+            <div class="draft-actions">
+              <button class="btn-edit" (click)="editDraft(draft.id)">
+                Edit
+              </button>
+              <button class="btn-delete" (click)="deleteDraft(draft.id, draft.title)">
+                Delete
+              </button>
+              <button class="btn-publish" (click)="publishDraft(draft.id, draft.title)">
+                Publish
+              </button>
+            </div>
+          </div>
+        }
+      </div>
+    }
   </div>
 </div>

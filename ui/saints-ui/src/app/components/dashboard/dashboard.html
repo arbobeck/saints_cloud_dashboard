@@ -3,51 +3,67 @@
 
   <section>
     <h2>Saints</h2>
-    <div *ngIf="loadingSaints" class="spinner-cell">
-      <app-loading-spinner></app-loading-spinner>
-    </div>
-    <div *ngIf="errorSaints">
-      <app-error-message [message]="errorSaints"></app-error-message>
-    </div>
-    <table *ngIf="!loadingSaints && !errorSaints">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Feast Day</th>
-          <th>Patronage</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let saint of saints">
-          <td data-label="Name">{{ saint.name }}</td>
-          <td data-label="Feast Day">{{ saint.feastDay | date }}</td>
-          <td data-label="Patronage">{{ saint.patronages }}</td>
-        </tr>
-      </tbody>
-    </table>
+    @if (loadingSaints) {
+      <div class="spinner-cell">
+        <app-loading-spinner></app-loading-spinner>
+      </div>
+    }
+    @if (errorSaints) {
+      <div>
+        <app-error-message [message]="errorSaints"></app-error-message>
+      </div>
+    }
+    @if (!loadingSaints && !errorSaints) {
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Feast Day</th>
+            <th>Patronage</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (saint of saints; track saint) {
+            <tr>
+              <td data-label="Name">{{ saint.name }}</td>
+              <td data-label="Feast Day">{{ saint.feastDay | date }}</td>
+              <td data-label="Patronage">{{ saint.patronages }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
   </section>
 
   <section>
     <h2>Byzantine Church History</h2>
-    <div *ngIf="loadingHistory" class="spinner-cell">
-      <app-loading-spinner></app-loading-spinner>
-    </div>
-    <div *ngIf="errorHistory">
-      <app-error-message [message]="errorHistory"></app-error-message>
-    </div>
-    <table *ngIf="!loadingHistory && !errorHistory">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Year</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let item of history">
-          <td data-label="Name">{{ item.name }}</td>
-          <td data-label="Year">{{ item.year }}</td>
-        </tr>
-      </tbody>
-    </table>
+    @if (loadingHistory) {
+      <div class="spinner-cell">
+        <app-loading-spinner></app-loading-spinner>
+      </div>
+    }
+    @if (errorHistory) {
+      <div>
+        <app-error-message [message]="errorHistory"></app-error-message>
+      </div>
+    }
+    @if (!loadingHistory && !errorHistory) {
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Year</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of history; track item) {
+            <tr>
+              <td data-label="Name">{{ item.name }}</td>
+              <td data-label="Year">{{ item.year }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
   </section>
 </div>

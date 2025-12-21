@@ -4,7 +4,7 @@
     <p>
       Hourly prayers from the Byzantine tradition
     </p>
-    
+
     <h2>Daily Services</h2>
     <ul class="service-list">
       <li>
@@ -21,10 +21,12 @@
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let row of matinsTable">
-                  <td data-label="Church Slavonic">{{ row.churchSlavic }}</td>
-                  <td data-label="English">{{ row.english }}</td>
-                </tr>
+                @for (row of matinsTable; track row) {
+                  <tr>
+                    <td data-label="Church Slavonic">{{ row.churchSlavic }}</td>
+                    <td data-label="English">{{ row.english }}</td>
+                  </tr>
+                }
               </tbody>
             </table>
           </div>

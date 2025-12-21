@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 
 @Component({
   selector: 'app-datenschutz',
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './datenschutz.html',
   styleUrls: ['./datenschutz.css']
 })

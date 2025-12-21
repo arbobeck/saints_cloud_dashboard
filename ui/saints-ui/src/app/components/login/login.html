@@ -14,7 +14,7 @@
           [disabled]="isLoading"
           required
           autocomplete="username"
-        />
+          />
       </div>
 
       <div class="form-group">
@@ -27,18 +27,20 @@
           [disabled]="isLoading"
           required
           autocomplete="current-password"
-        />
+          />
       </div>
 
-      <div class="error-message" *ngIf="error">
-        {{ error }}
-      </div>
+      @if (error) {
+        <div class="error-message">
+          {{ error }}
+        </div>
+      }
 
       <button
         type="submit"
         class="login-button"
         [disabled]="isLoading || !loginForm.valid"
-      >
+        >
         {{ isLoading ? 'Logging in...' : 'Login' }}
       </button>
     </form>

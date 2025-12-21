@@ -1,11 +1,11 @@
 // src/app/components/loading-spinner/loading-spinner.ts
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 
 @Component({
   selector: 'app-loading-spinner',
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
   template: `
     <div class="spinner-container">
       <div class="spinner"></div>
