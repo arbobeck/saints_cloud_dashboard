@@ -106,7 +106,7 @@ namespace SaintsApi.Services
 
                 // Commit
                 var commit = repo.Commit(
-                    $"Publish blog post: {draft.Title}",
+                    $"Publish blog post: {draft.Title ?? "Untitled"}",
                     signature,
                     signature
                 );
@@ -154,7 +154,7 @@ namespace SaintsApi.Services
 title: ""{draft.Title}""
 slug: ""{draft.Slug}""
 date: ""{DateTime.UtcNow:yyyy-MM-dd}""
-author: ""{draft.Author}""
+author: ""{draft.Author ?? "Admin"}""
 ---
 
 {draft.Content}";
