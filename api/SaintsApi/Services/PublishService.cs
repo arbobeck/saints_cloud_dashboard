@@ -94,7 +94,14 @@ namespace SaintsApi.Services
                 Commands.Pull(repo, signature, pullOptions);
 
                 // Create blog directory in src/assets
-                var blogDir = Path.Combine(repoPath, "src", "assets", "blog");
+                var blogDir = Path.Combine(
+                    repoPath,
+                    "ui",
+                    "saints-ui",
+                    "src",
+                    "assets",
+                    "blog"
+                );                
                 Directory.CreateDirectory(blogDir);
 
                 // Generate and save markdown file
@@ -107,8 +114,8 @@ namespace SaintsApi.Services
                 await GenerateBlogIndexAsync(blogDir);
 
                 // Stage changes
-                Commands.Stage(repo, "src/assets/blog/*");
-
+                Commands.Stage(repo, "ui/saints-ui/src/assets/blog");
+                
                 // Commit
                 var commit = repo.Commit(
                     $"Publish blog post: {draft.Title ?? "Untitled"}",
