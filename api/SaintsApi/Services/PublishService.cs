@@ -114,7 +114,14 @@ namespace SaintsApi.Services
                 await GenerateBlogIndexAsync(blogDir);
 
                 // Stage changes
-                Commands.Stage(repo, "ui/saints-ui/src/assets/blog");
+                Commands.Stage(repo, filePath);
+                Commands.Stage(repo, Path.Combine(blogDir, "blog-index.json"));
+
+                var status = repo.RetrieveStatus();
+                foreach (var entry in status)
+                {
+                    _logger.LogInformation($"Git status: {entry.FilePath} → {entry.State}");
+                }
                 
                 // Commit
                 var commit = repo.Commit(
@@ -122,6 +129,16 @@ namespace SaintsApi.Services
                     signature,
                     signature
                 );
+
+                if (!repo.RetrieveStatus().IsDirty)
+                {
+                    _logger.LogInformation("No changes detected; skipping commit.");
+                    return new PublishResult
+                    {
+                        Success = true,
+                        Message = "Already published (no changes detected)."
+                    };
+                }
 
                 // Push to main
                 var pushOptions = new PushOptions();
@@ -137,6 +154,8 @@ namespace SaintsApi.Services
                 {
                     throw new InvalidOperationException("No 'main' or 'master' branch found in repository.");
                 }
+
+                repo.Network.Push(branch, pushOptions);
 
                 // Update draft status
                 draft.Status = "published";
@@ -163,9 +182,9 @@ namespace SaintsApi.Services
             }
         }
 
-        private string GenerateMarkdown(BlogDraft draft)
-        {
-            return $@"---
+private string GenerateMarkdown(BlogDraft draft)
+{
+    return $@"---
 title: ""{draft.Title}""
 slug: ""{draft.Slug}""
 date: ""{DateTime.UtcNow:yyyy-MM-dd}""
@@ -173,8 +192,7 @@ author: ""{draft.Author ?? "Admin"}""
 ---
 
 {draft.Content}";
-        }
-
+}
         private async Task GenerateBlogIndexAsync(string blogDir)
         {
             var posts = new List<BlogPostIndex>();
