@@ -35,7 +35,7 @@ export interface PublishResponse {
   providedIn: 'root'
 })
 export class BlogService {
-  private apiUrl = 'https://saints-api-dzwz.onrender.com';
+  private apiUrl = 'https://saints-api-dzwz.onrender.com/api/admin';
 
   constructor(
     private http: HttpClient,
