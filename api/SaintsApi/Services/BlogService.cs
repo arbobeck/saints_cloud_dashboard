@@ -3,6 +3,8 @@ using SaintsApi.Models;
 using SaintsApi.DTOs;
 using Microsoft.EntityFrameworkCore;
 using System.Text.RegularExpressions;
+using System.Text.Json;
+using System.Diagnostics;
 
 namespace SaintsApi.Services
 {
@@ -12,6 +14,9 @@ namespace SaintsApi.Services
         Task<BlogDraftResponse?> GetDraftByIdAsync(int id);
         Task<BlogDraftResponse> CreateDraftAsync(CreateDraftRequest request);
         Task<BlogDraftResponse?> UpdateDraftAsync(int id, UpdateDraftRequest request);
+        Task<List<BlogDraftResponse>> GetPublishedPostsAsync();
+        Task<BlogDraftResponse?> GetPostBySlugAsync(string slug);
+        Task<BlogDraftResponse?> PublishDraftAsync(int id);
         Task<bool> DeleteDraftAsync(int id);
     }
 
@@ -101,6 +106,93 @@ namespace SaintsApi.Services
             _context.BlogDrafts.Remove(draft);
             await _context.SaveChangesAsync();
             return true;
+        }
+
+        public async Task<List<BlogDraftResponse>> GetPublishedPostsAsync()
+        {
+            return await _context.BlogDrafts
+                .Where(d => d.Status == "published")
+                .OrderByDescending(d => d.PublishedAt)
+                .Select(d => MapToResponse(d))
+                .ToListAsync();
+        }
+
+        public async Task<BlogDraftResponse?> GetPostBySlugAsync(string slug)
+        {
+            var post = await _context.BlogDrafts
+                .FirstOrDefaultAsync(d => d.Slug == slug && d.Status == "published");
+            return post != null ? MapToResponse(post) : null;
+        }
+
+        public async Task<BlogDraftResponse?> PublishDraftAsync(int id)
+        {
+            var draft = await _context.BlogDrafts.FindAsync(id);
+            if (draft == null) return null;
+
+            draft.Status = "published";
+            draft.PublishedAt = DateTime.UtcNow;
+            draft.UpdatedAt = DateTime.UtcNow;
+
+            await _context.SaveChangesAsync();
+
+            // 1. Regenerate blog index JSON
+            await GenerateBlogIndexJsonAsync();
+
+            // 2. Commit + push
+            CommitAndPush();
+
+            return MapToResponse(draft);
+        }
+
+        private async Task GenerateBlogIndexJsonAsync()
+        {
+            var publishedPosts = await _context.BlogDrafts
+                .Where(d => d.Status == "published")
+                .OrderByDescending(d => d.PublishedAt)
+                .Select(d => new
+                {
+                    id = d.Id,
+                    title = d.Title,
+                    slug = d.Slug,
+                    author = d.Author,
+                    publishedAt = d.PublishedAt
+                })
+                .ToListAsync();
+
+            var json = System.Text.Json.JsonSerializer.Serialize(
+                publishedPosts,
+                new JsonSerializerOptions { WriteIndented = true }
+            );
+
+            var path = Path.Combine(
+                "/repo/byzantica-frontend/src/app/assets/blog",
+                "blog-index.json"
+            );
+
+            Directory.CreateDirectory(Path.GetDirectoryName(path)!);
+            await File.WriteAllTextAsync(path, json);
+        }
+
+        private void CommitAndPush()
+        {
+            RunGit("add src/app/assets/blog/blog-index.json");
+            RunGit("commit -m \"Publish blog post\"");
+            RunGit("push origin main");
+        }
+
+        private void RunGit(string args)
+        {
+            var psi = new ProcessStartInfo
+            {
+                FileName = "git",
+                Arguments = args,
+                WorkingDirectory = "/repo/byzantica-frontend",
+                RedirectStandardOutput = true,
+                RedirectStandardError = true
+            };
+
+            using var process = Process.Start(psi);
+            process!.WaitForExit();
         }
 
         private static string GenerateSlug(string title)

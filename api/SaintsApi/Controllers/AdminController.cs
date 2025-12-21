@@ -69,5 +69,19 @@ namespace SaintsApi.Controllers
 
             return NoContent();
         }
+        
+        [HttpPost("publish/{id}")]
+        public async Task<IActionResult> PublishDraft(int id)
+        {
+            var draft = await _blogService.PublishDraftAsync(id);
+
+            if (draft == null)
+            {
+                return NotFound(new { message = "Draft not found" });
+            }
+
+            return Ok(draft);
+        }
+
     }
 }
