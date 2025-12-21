@@ -181,23 +181,6 @@ app.MapDelete("/drafts/{id:int}", async (int id, IBlogService blogService) =>
     return success ? Results.NoContent() : Results.NotFound();
 }).RequireAuthorization();
 
-app.MapPost("/api/admin/publish/{id}", async (int id, IBlogService blogService) =>
-{
-    try
-    {
-        var draft = await blogService.PublishDraftAsync(id);
-        if (draft == null)
-            return Results.NotFound(new { message = "Draft not found" });
-
-        return Results.Ok(draft);
-    }
-    catch (Exception ex)
-    {
-        Console.WriteLine($"Publish error: {ex}");
-        return Results.Problem($"Error publishing draft: {ex.Message}", statusCode: 500);
-    }
-}).RequireAuthorization();
-
 app.Run();
 
 public partial class Program { }

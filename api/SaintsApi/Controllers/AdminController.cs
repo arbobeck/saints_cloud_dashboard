@@ -11,10 +11,12 @@ namespace SaintsApi.Controllers
     public class AdminController : ControllerBase
     {
         private readonly IBlogService _blogService;
+        private readonly IPublishService _publishService;
 
-        public AdminController(IBlogService blogService)
+        public AdminController(IBlogService blogService, IPublishService publishService)
         {
             _blogService = blogService;
+            _publishService = publishService;
         }
 
         [HttpGet("drafts")]
@@ -28,12 +30,10 @@ namespace SaintsApi.Controllers
         public async Task<IActionResult> GetDraft(int id)
         {
             var draft = await _blogService.GetDraftByIdAsync(id);
-            
             if (draft == null)
             {
                 return NotFound(new { message = "Draft not found" });
             }
-
             return Ok(draft);
         }
 
@@ -48,12 +48,10 @@ namespace SaintsApi.Controllers
         public async Task<IActionResult> UpdateDraft(int id, [FromBody] UpdateDraftRequest request)
         {
             var draft = await _blogService.UpdateDraftAsync(id, request);
-            
             if (draft == null)
             {
                 return NotFound(new { message = "Draft not found" });
             }
-
             return Ok(draft);
         }
 
@@ -61,27 +59,28 @@ namespace SaintsApi.Controllers
         public async Task<IActionResult> DeleteDraft(int id)
         {
             var result = await _blogService.DeleteDraftAsync(id);
-            
             if (!result)
             {
                 return NotFound(new { message = "Draft not found" });
             }
-
             return NoContent();
         }
-        
+
         [HttpPost("publish/{id}")]
         public async Task<IActionResult> PublishDraft(int id)
         {
-            var draft = await _blogService.PublishDraftAsync(id);
-
-            if (draft == null)
+            var result = await _publishService.PublishDraftAsync(id);
+            
+            if (!result.Success)
             {
-                return NotFound(new { message = "Draft not found" });
+                return BadRequest(new { message = result.Message });
             }
 
-            return Ok(draft);
+            return Ok(new
+            {
+                message = result.Message,
+                commitHash = result.CommitHash
+            });
         }
-
     }
 }

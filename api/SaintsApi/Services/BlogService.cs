@@ -16,7 +16,6 @@ namespace SaintsApi.Services
         Task<BlogDraftResponse?> UpdateDraftAsync(int id, UpdateDraftRequest request);
         Task<List<BlogDraftResponse>> GetPublishedPostsAsync();
         Task<BlogDraftResponse?> GetPostBySlugAsync(string slug);
-        Task<BlogDraftResponse?> PublishDraftAsync(int id);
         Task<bool> DeleteDraftAsync(int id);
     }
 
@@ -122,26 +121,6 @@ namespace SaintsApi.Services
             var post = await _context.BlogDrafts
                 .FirstOrDefaultAsync(d => d.Slug == slug && d.Status == "published");
             return post != null ? MapToResponse(post) : null;
-        }
-
-        public async Task<BlogDraftResponse?> PublishDraftAsync(int id)
-        {
-            var draft = await _context.BlogDrafts.FindAsync(id);
-            if (draft == null) return null;
-
-            draft.Status = "published";
-            draft.PublishedAt = DateTime.UtcNow;
-            draft.UpdatedAt = DateTime.UtcNow;
-
-            await _context.SaveChangesAsync();
-
-            // 1. Regenerate blog index JSON
-            await GenerateBlogIndexJsonAsync();
-
-            // 2. Commit + push
-            CommitAndPush();
-
-            return MapToResponse(draft);
         }
 
         private async Task GenerateBlogIndexJsonAsync()
