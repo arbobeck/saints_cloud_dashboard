@@ -18,14 +18,15 @@ namespace SaintsApi.Services
         Task<BlogDraftResponse?> GetPostBySlugAsync(string slug);
         Task<bool> DeleteDraftAsync(int id);
     }
-
     public class BlogService : IBlogService
     {
         private readonly SaintsDbContext _context;
+        private readonly IWebHostEnvironment _env;
 
-        public BlogService(SaintsDbContext context)
+        public BlogService(SaintsDbContext context, IWebHostEnvironment env)
         {
             _context = context;
+            _env = env;
         }
 
         public async Task<List<BlogDraftResponse>> GetAllDraftsAsync()
@@ -144,7 +145,8 @@ namespace SaintsApi.Services
             );
 
             var path = Path.Combine(
-                "/saints_cloud_dashboard/ui/saints-ui/src/assets/blog",
+                _env.WebRootPath,
+                "blog",
                 "blog-index.json"
             );
 
@@ -155,24 +157,63 @@ namespace SaintsApi.Services
         private void CommitAndPush()
         {
             RunGit("add src/assets/blog/blog-index.json");
+
             RunGit("commit -m \"Publish blog post\"");
-            RunGit("push origin main");
+
+            var gitUser = Environment.GetEnvironmentVariable("Git__Username");
+            var gitToken = Environment.GetEnvironmentVariable("Git__Token");
+            var gitRepo = Environment.GetEnvironmentVariable("Git__RepoUrl");
+
+            if (string.IsNullOrWhiteSpace(gitUser) || string.IsNullOrWhiteSpace(gitToken) || string.IsNullOrWhiteSpace(gitRepo))
+            {
+                Console.WriteLine("Git environment variables are missing.");
+                return;
+            }
+
+            var authUrl = gitRepo.Replace("https://", $"https://{gitUser}:{gitToken}@");
+
+            RunGit($"push {authUrl} main");
         }
+
 
         private void RunGit(string args)
         {
+            // Use current directory as the repo root
+            var repoPath = Path.Combine(Directory.GetCurrentDirectory(), "ui", "saints-ui");
+
             var psi = new ProcessStartInfo
             {
                 FileName = "git",
                 Arguments = args,
-                WorkingDirectory = "/repo/byzantica-frontend",
+                WorkingDirectory = repoPath,
                 RedirectStandardOutput = true,
-                RedirectStandardError = true
+                RedirectStandardError = true,
+                UseShellExecute = false,   // required for redirection
+                Environment =
+                {
+                    ["GIT_ASKPASS"] = "echo",                     // disables interactive prompts
+                    ["GIT_USER"] = Environment.GetEnvironmentVariable("Git__Username"),
+                    ["GIT_TOKEN"] = Environment.GetEnvironmentVariable("Git__Token")
+                }
             };
 
-            using var process = Process.Start(psi);
-            process!.WaitForExit();
+            using var process = Process.Start(psi)!;
+
+            // Read output for logging
+            string output = process.StandardOutput.ReadToEnd();
+            string error = process.StandardError.ReadToEnd();
+
+            process.WaitForExit();
+
+            if (process.ExitCode != 0)
+            {
+                Console.WriteLine($"Git command failed: {args}");
+                Console.WriteLine($"Output: {output}");
+                Console.WriteLine($"Error: {error}");
+                throw new Exception("Git command failed, see logs above.");
+            }
         }
+
 
         private static string GenerateSlug(string title)
         {
