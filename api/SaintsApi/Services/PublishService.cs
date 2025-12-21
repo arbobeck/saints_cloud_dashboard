@@ -72,14 +72,19 @@ namespace SaintsApi.Services
 
                 repo = new Repository(repoPath);
 
-                // Pull latest changes
-                var pullOptions = new PullOptions();
-                pullOptions.FetchOptions.CredentialsProvider = (url, user, cred) => 
-                    new UsernamePasswordCredentials
+                var pullOptions = new PullOptions
+                {
+                    FetchOptions = new FetchOptions
                     {
-                        Username = gitUsername,
-                        Password = gitToken
-                    };
+                        CredentialsProvider = (url, user, cred) =>
+                            new UsernamePasswordCredentials
+                            {
+                                Username = gitUsername,
+                                Password = gitToken
+                            }
+                    }
+                };
+
 
                 var signature = new Signature(
                     new Identity(gitUsername ?? "Byzantica Admin", "admin@byzantica.org"),
@@ -121,7 +126,10 @@ namespace SaintsApi.Services
                     };
 
                 var branch = repo.Branches["main"] ?? repo.Branches["master"];
-                repo.Network.Push(branch, pushOptions);
+                if (branch == null)
+                {
+                    throw new InvalidOperationException("No 'main' or 'master' branch found in repository.");
+                }
 
                 // Update draft status
                 draft.Status = "published";
