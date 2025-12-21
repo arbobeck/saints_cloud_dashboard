@@ -1,3 +1,4 @@
+// services/blog.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -25,11 +26,16 @@ export interface UpdateDraftRequest {
   content: string;
 }
 
+export interface PublishResponse {
+  message: string;
+  commitHash?: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class BlogService {
-  private apiUrl = 'https://saints-api-dzwz.onrender.com';
+  private apiUrl = 'https://your-render-api.onrender.com/api/admin'; // Replace with your Render URL
 
   constructor(
     private http: HttpClient,
@@ -70,6 +76,12 @@ export class BlogService {
 
   deleteDraft(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/drafts/${id}`, {
+      headers: this.getHeaders()
+    });
+  }
+
+  publishDraft(id: number): Observable<PublishResponse> {
+    return this.http.post<PublishResponse>(`${this.apiUrl}/publish/${id}`, {}, {
       headers: this.getHeaders()
     });
   }

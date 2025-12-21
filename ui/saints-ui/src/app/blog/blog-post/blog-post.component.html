@@ -1,0 +1,27 @@
+<div class="page-container">
+  <div class="content-card">
+    <div class="loading" *ngIf="isLoading">
+      Loading post...
+    </div>
+
+    <div class="error-message" *ngIf="error && !isLoading">
+      {{ error }}
+    </div>
+
+    <article class="blog-post" *ngIf="!isLoading && !error">
+      <header class="post-header">
+        <h1>{{ title }}</h1>
+        <div class="post-meta">
+          <span class="post-date">{{ formatDate(date) }}</span>
+          <span class="post-author">by {{ author }}</span>
+        </div>
+      </header>
+
+      <div class="post-content markdown-body" [innerHTML]="content"></div>
+
+      <footer class="post-footer">
+        <a routerLink="/blog" class="back-link">← Back to Blog</a>
+      </footer>
+    </article>
+  </div>
+</div>

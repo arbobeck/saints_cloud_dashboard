@@ -76,4 +76,20 @@ export class AdminComponent implements OnInit {
       day: 'numeric'
     });
   }
+  publishDraft(id: number, title: string): void {
+  if (!confirm(`Publish "${title}"? This will make it live on your blog.`)) {
+    return;
+  }
+
+  this.blogService.publishDraft(id).subscribe({
+    next: () => {
+      alert('Published successfully! It will appear on your blog shortly.');
+      this.loadDrafts();
+    },
+    error: (err) => {
+      alert('Failed to publish');
+      console.error('Error publishing:', err);
+    }
+  });
+}
 }

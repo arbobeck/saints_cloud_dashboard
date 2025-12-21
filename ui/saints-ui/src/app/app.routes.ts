@@ -13,6 +13,9 @@ import { LoginComponent } from './components/login/login';
 import { AdminComponent } from './components/admin/admin';
 import { EditorComponent } from './components/editor/editor';
 import { authGuard } from './guards/auth.guard';
+import { BlogListComponent } from './blog/blog-list/blog-list.component';
+import { BlogPostComponent } from './blog/blog-post/blog-post.component';
+
 
 export const routes: Routes = [
   { path: '', component: Home },
@@ -23,9 +26,11 @@ export const routes: Routes = [
   { path: 'datenschutz', component: Datenschutz },
   { path: 'uptime', component: Uptime },
   { path: 'admin/login', component: LoginComponent },
-  { path: 'admin/dashboard', component: AdminComponent, canActivate: [authGuard] },
+  { path: 'admin/', component: AdminComponent, canActivate: [authGuard] },
   { path: 'admin/editor', component: EditorComponent, canActivate: [authGuard] },
   { path: 'admin/editor/:id', component: EditorComponent, canActivate: [authGuard] },
+  { path: 'blog', component: BlogListComponent },
+  { path: 'blog/:slug', component: BlogPostComponent },
   { path: '**', redirectTo: '' }
 ];
 

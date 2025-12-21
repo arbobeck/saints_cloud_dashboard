@@ -5,6 +5,7 @@ using System.Text;
 using SaintsApi.Data;
 using SaintsApi.Models;
 using SaintsApi.Services;
+using SaintsApi.DTOs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +22,7 @@ builder.Services.AddDbContext<SaintsDbContext>(options =>
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IBlogService, BlogService>();
+builder.Services.AddScoped<IPublishService, PublishService>();
 
 // JWT Authentication
 var jwtKey = builder.Configuration["Jwt:Key"] ?? "YourSuperSecretKeyHere_ChangeThis_MinimumLength32Characters!";
@@ -148,6 +150,36 @@ app.MapGet("/api/history/{id:int}", async (int id, SaintsDbContext db) =>
         return Results.Problem($"Error retrieving history: {ex.Message}");
     }
 });
+
+app.MapGet("/drafts", async (IBlogService blogService) =>
+{
+    var drafts = await blogService.GetAllDraftsAsync();
+    return Results.Ok(drafts);
+}).RequireAuthorization();
+
+app.MapGet("/drafts/{id:int}", async (int id, IBlogService blogService) =>
+{
+    var draft = await blogService.GetDraftByIdAsync(id);
+    return draft is not null ? Results.Ok(draft) : Results.NotFound();
+}).RequireAuthorization();
+
+app.MapPost("/drafts", async (CreateDraftRequest request, IBlogService blogService) =>
+{
+    var draft = await blogService.CreateDraftAsync(request);
+    return Results.Created($"/drafts/{draft.Id}", draft);
+}).RequireAuthorization();
+
+app.MapPut("/drafts/{id:int}", async (int id, UpdateDraftRequest request, IBlogService blogService) =>
+{
+    var draft = await blogService.UpdateDraftAsync(id, request);
+    return draft is not null ? Results.Ok(draft) : Results.NotFound();
+}).RequireAuthorization();
+
+app.MapDelete("/drafts/{id:int}", async (int id, IBlogService blogService) =>
+{
+    var success = await blogService.DeleteDraftAsync(id);
+    return success ? Results.NoContent() : Results.NotFound();
+}).RequireAuthorization();
 
 app.Run();
 

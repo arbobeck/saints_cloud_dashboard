@@ -42,3 +42,38 @@ VALUES
     ('Pope Pius X issues apostolic letter on Eastern Churches', 1907),
     ('First Russian Greek Catholic parish in Moscow re-established', 1991),
     ('Pope John Paul II encyclical on Eastern Churches and ecumenism', 1995);
+
+-- Add to your existing saintsdb database
+
+-- Admin user table (single admin for now)
+CREATE TABLE "AdminUser" (
+    "Id" SERIAL PRIMARY KEY,
+    "Username" VARCHAR(50) UNIQUE NOT NULL,
+    "PasswordHash" VARCHAR(255) NOT NULL,
+    "CreatedAt" TIMESTAMP DEFAULT NOW()
+);
+
+
+-- Insert default admin user (password: "admin123" - CHANGE THIS!)
+-- Password hash is bcrypt of "admin123"
+INSERT INTO "AdminUser" ("Username", "PasswordHash")
+VALUES ('admin', '$2a$12$aKLESGA83lwe3GNdo5.Ake2zjH4KZCH98mIHBORJ.UCRLxo4LwedW');
+
+-- Note: You should change this password immediately after first login!
+
+-- Blog drafts table
+CREATE TABLE "BlogDrafts" (
+    "Id" SERIAL PRIMARY KEY,
+    "Title" VARCHAR(255) NOT NULL,
+    "Slug" VARCHAR(255) UNIQUE NOT NULL,
+    "Content" TEXT NOT NULL,
+    "Author" VARCHAR(100) DEFAULT 'Admin',
+    "Status" VARCHAR(20) DEFAULT 'draft',
+    "CreatedAt" TIMESTAMP DEFAULT NOW(),
+    "UpdatedAt" TIMESTAMP DEFAULT NOW(),
+    "PublishedAt" TIMESTAMP NULL
+);
+
+-- Indexes for performance
+CREATE INDEX idx_drafts_status ON "BlogDrafts"("Status");
+CREATE INDEX idx_drafts_slug ON "BlogDrafts"("Slug");

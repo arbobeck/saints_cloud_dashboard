@@ -1,0 +1,94 @@
+.page-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.content-card {
+  background-color: rgba(29, 29, 29, 0.95);
+  color: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+h1 {
+  color: #c18340;
+  margin-bottom: 2rem;
+  font-size: 2rem;
+}
+
+.loading, .error-message, .empty-state {
+  text-align: center;
+  padding: 3rem;
+  color: #999;
+}
+
+.error-message {
+  color: #ef4444;
+}
+
+.blog-posts {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.blog-post-card {
+  padding: 1.5rem;
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.blog-post-card:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+  transform: translateY(-2px);
+}
+
+.blog-post-card h2 {
+  margin: 0 0 1rem 0;
+  font-size: 1.5rem;
+}
+
+.blog-post-card h2 a {
+  color: #c18340;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.blog-post-card h2 a:hover {
+  color: #d4a05f;
+}
+
+.post-meta {
+  display: flex;
+  gap: 1.5rem;
+  color: #999;
+  font-size: 0.9rem;
+}
+
+.post-date, .post-author {
+  display: flex;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .page-container {
+    padding: 1rem;
+  }
+
+  .content-card {
+    padding: 1.5rem;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  .post-meta {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}

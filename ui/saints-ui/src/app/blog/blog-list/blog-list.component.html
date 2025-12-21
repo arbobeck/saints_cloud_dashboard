@@ -1,0 +1,29 @@
+<div class="page-container">
+  <div class="content-card">
+    <h1>Blog</h1>
+
+    <div class="loading" *ngIf="isLoading">
+      Loading posts...
+    </div>
+
+    <div class="error-message" *ngIf="error && !isLoading">
+      {{ error }}
+    </div>
+
+    <div class="blog-posts" *ngIf="!isLoading && !error">
+      <div class="empty-state" *ngIf="posts.length === 0">
+        <p>No blog posts published yet. Check back soon!</p>
+      </div>
+
+      <article class="blog-post-card" *ngFor="let post of posts">
+        <h2>
+          <a [routerLink]="['/blog', post.slug]">{{ post.title }}</a>
+        </h2>
+        <div class="post-meta">
+          <span class="post-date">{{ formatDate(post.date) }}</span>
+          <span class="post-author">by {{ post.author }}</span>
+        </div>
+      </article>
+    </div>
+  </div>
+</div>
