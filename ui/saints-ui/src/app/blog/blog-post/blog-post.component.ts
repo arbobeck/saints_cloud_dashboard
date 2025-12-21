@@ -41,11 +41,10 @@ export class BlogPostComponent implements OnInit {
         author: string;
         filename: string;
       }
-      
+
       // First, get the index to find the filename
       const posts = await this.http.get<PostIndex[]>('/assets/blog/blog-index.json').toPromise();
-      const post = posts?.find(p => p.slug === slug);
-
+      const post = posts?.find((p: PostIndex) => p.slug === slug);
       if (!post) {
         this.error = 'Post not found';
         this.isLoading = false;

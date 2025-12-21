@@ -144,7 +144,7 @@ namespace SaintsApi.Services
             );
 
             var path = Path.Combine(
-                "/repo/byzantica-frontend/src/app/assets/blog",
+                "/saints_cloud_dashboard/ui/saints-ui/src/assets/blog",
                 "blog-index.json"
             );
 
@@ -154,7 +154,7 @@ namespace SaintsApi.Services
 
         private void CommitAndPush()
         {
-            RunGit("add src/app/assets/blog/blog-index.json");
+            RunGit("add src/assets/blog/blog-index.json");
             RunGit("commit -m \"Publish blog post\"");
             RunGit("push origin main");
         }
