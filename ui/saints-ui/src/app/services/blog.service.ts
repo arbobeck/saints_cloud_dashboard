@@ -35,7 +35,7 @@ export interface PublishResponse {
   providedIn: 'root'
 })
 export class BlogService {
-  private apiUrl = 'https://your-render-api.onrender.com/api/admin'; // Replace with your Render URL
+  private apiUrl = 'https://saints-api-dzwz.onrender.com';
 
   constructor(
     private http: HttpClient,
