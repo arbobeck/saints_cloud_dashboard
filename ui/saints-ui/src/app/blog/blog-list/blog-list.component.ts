@@ -29,19 +29,19 @@ export class BlogListComponent implements OnInit {
     this.loadPosts();
   }
 
-    loadPosts(): void {
-    this.http.get<BlogPost[]>('/assets/blog/blog-index.json').subscribe({
-        next: (posts: BlogPost[]) => {  // Add type here
+  loadPosts(): void {
+    this.http.get<BlogPost[]>('https://saints-api-dzwz.onrender.com/api/blog/blog-index.json').subscribe({
+      next: (posts: BlogPost[]) => {
         this.posts = posts;
         this.isLoading = false;
-        },
-        error: (err: Error) => {  // Add type here
+      },
+      error: (err: Error) => {
         this.error = 'No blog posts available yet';
         this.isLoading = false;
         console.error('Error loading blog posts:', err);
-        }
+      }
     });
-    }
+  }
 
   formatDate(dateString: string): string {
     const date = new Date(dateString);

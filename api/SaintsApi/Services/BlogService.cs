@@ -14,8 +14,8 @@ namespace SaintsApi.Services
         Task<BlogDraftResponse?> GetDraftByIdAsync(int id);
         Task<BlogDraftResponse> CreateDraftAsync(CreateDraftRequest request);
         Task<BlogDraftResponse?> UpdateDraftAsync(int id, UpdateDraftRequest request);
-        Task<List<BlogDraftResponse>> GetPublishedPostsAsync();
-        Task<BlogDraftResponse?> GetPostBySlugAsync(string slug);
+        Task<List<BlogPost>> GetPublishedPostsAsync();
+        Task<BlogPost?> GetPostBySlugAsync(string slug);
         Task<bool> DeleteDraftAsync(int id);
     }
     public class BlogService : IBlogService
@@ -108,20 +108,17 @@ namespace SaintsApi.Services
             return true;
         }
 
-        public async Task<List<BlogDraftResponse>> GetPublishedPostsAsync()
+        public async Task<List<BlogPost>> GetPublishedPostsAsync()
         {
-            return await _context.BlogDrafts
-                .Where(d => d.Status == "published")
-                .OrderByDescending(d => d.PublishedAt)
-                .Select(d => MapToResponse(d))
+            return await _context.BlogPosts
+                .OrderByDescending(p => p.PublishedAt)
                 .ToListAsync();
         }
 
-        public async Task<BlogDraftResponse?> GetPostBySlugAsync(string slug)
+        public async Task<BlogPost?> GetPostBySlugAsync(string slug)
         {
-            var post = await _context.BlogDrafts
-                .FirstOrDefaultAsync(d => d.Slug == slug && d.Status == "published");
-            return post != null ? MapToResponse(post) : null;
+            return await _context.BlogPosts
+                .FirstOrDefaultAsync(p => p.Slug == slug);
         }
 
         private async Task GenerateBlogIndexJsonAsync()

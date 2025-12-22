@@ -13,6 +13,7 @@ public class SaintsDbContext : DbContext
     public DbSet<History> History { get; set; }
     public DbSet<AdminUser> AdminUsers { get; set; }
     public DbSet<BlogDraft> BlogDrafts { get; set; }
+    public DbSet<BlogPost> BlogPosts => Set<BlogPost>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

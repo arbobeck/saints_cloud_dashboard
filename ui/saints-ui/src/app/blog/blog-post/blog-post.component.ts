@@ -4,6 +4,13 @@ import { ActivatedRoute, RouterModule } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
+interface PostIndex {
+  title: string;
+  slug: string;
+  date: string;
+  author: string;
+  filename?: string;
+}
 @Component({
   selector: 'app-blog-post',
   standalone: true,
@@ -32,39 +39,38 @@ export class BlogPostComponent implements OnInit {
     }
   }
 
-  async loadPost(slug: string): Promise<void> {
-    try {
-      interface PostIndex {
-        title: string;
-        slug: string;
-        date: string;
-        author: string;
-        filename: string;
-      }
+    async loadPost(slug: string): Promise<void> {
+      try {
+        // Get the index from API
+        const posts = await this.http.get<PostIndex[]>(
+          'https://saints-api-dzwz.onrender.com/api/blog/blog-index.json'
+        ).toPromise();
+        
+        const post = posts?.find((p: PostIndex) => p.slug === slug);
 
-      // First, get the index to find the filename
-      const posts = await this.http.get<PostIndex[]>('/assets/blog/blog-index.json').toPromise();
-      const post = posts?.find((p: PostIndex) => p.slug === slug);
-      if (!post) {
-        this.error = 'Post not found';
+        if (!post) {
+          this.error = 'Post not found';
+          this.isLoading = false;
+          return;
+        }
+
+        // Load markdown from API
+        const markdown = await this.http.get(
+          `https://saints-api-dzwz.onrender.com/api/blog/posts/${slug}.md`,
+          { responseType: 'text' }
+        ).toPromise();
+        
+        if (markdown) {
+          this.parseMarkdown(markdown);
+        }
+
         this.isLoading = false;
-        return;
+      } catch (err) {
+        this.error = 'Failed to load blog post';
+        this.isLoading = false;
+        console.error('Error loading post:', err);
       }
-
-      // Load the markdown file
-      const markdown = await this.http.get(`/assets/blog/${post.filename}`, { responseType: 'text' }).toPromise();
-      
-      if (markdown) {
-        this.parseMarkdown(markdown);
-      }
-
-      this.isLoading = false;
-    } catch (err) {
-      this.error = 'Failed to load blog post';
-      this.isLoading = false;
-      console.error('Error loading post:', err);
     }
-  }
 
   parseMarkdown(markdown: string): void {
     // Parse frontmatter
