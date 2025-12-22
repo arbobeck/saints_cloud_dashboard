@@ -5,11 +5,11 @@
 }
 
 .content-card {
-  background-color: rgba(29, 29, 29, 0.95);
-  color: white;
+  background-color: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(8px);
   padding: 2rem;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  border-radius: 12px;
 }
 
 .loading, .error-message {

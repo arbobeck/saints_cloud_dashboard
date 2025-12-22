@@ -7,7 +7,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 interface BlogPost {
   title: string;
   slug: string;
-  date: string;
+  publishedAt: string;
   author: string;
   content: string;
 }
@@ -45,7 +45,7 @@ export class BlogPostComponent implements OnInit {
       .subscribe({
         next: (post) => {
           this.title = post.title;
-          this.date = post.date;
+          this.date = post.publishedAt;
           this.author = post.author;
           this.content = this.sanitizer.bypassSecurityTrustHtml(post.content);
           this.isLoading = false;
@@ -55,5 +55,16 @@ export class BlogPostComponent implements OnInit {
           this.isLoading = false;
         }
       });
+  }
+
+  formatDate(dateString: string): string {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return '';
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
   }
 }

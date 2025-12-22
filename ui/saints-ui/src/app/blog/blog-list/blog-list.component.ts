@@ -6,7 +6,7 @@ import { HttpClient } from '@angular/common/http';
 interface BlogPost {
   title: string;
   slug: string;
-  date: string;
+  publishedAt: string;
   author: string;
   filename: string;
 }
