@@ -30,7 +30,7 @@ export class BlogListComponent implements OnInit {
   }
 
   loadPosts(): void {
-    this.http.get<BlogPost[]>('https://saints-api-dzwz.onrender.com/api/blog/posts').subscribe({
+    this.http.get<BlogPost[]>('https://saints-api-dzwz.onrender.com/api/blog/blog-index-json').subscribe({
       next: (posts: BlogPost[]) => {
         this.posts = posts;
         this.isLoading = false;
