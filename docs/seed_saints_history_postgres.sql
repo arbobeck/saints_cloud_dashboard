@@ -74,6 +74,17 @@ CREATE TABLE "BlogDrafts" (
     "PublishedAt" TIMESTAMP NULL
 );
 
+CREATE TABLE "BlogPosts" (
+    "Id" SERIAL PRIMARY KEY,
+    "Title" TEXT NOT NULL,
+    "Slug" TEXT NOT NULL UNIQUE,
+    "Content" TEXT NOT NULL,
+    "Author" TEXT,
+    "PublishedAt" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    "CreatedAt" TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
 -- Indexes for performance
 CREATE INDEX idx_drafts_status ON "BlogDrafts"("Status");
 CREATE INDEX idx_drafts_slug ON "BlogDrafts"("Slug");
+
