@@ -52,3 +52,8 @@ From the root directory (/saints_cloud_dashboard):
 ```bash
 docker compose --profile prod up -d
 ```
+
+## to-do
+1. server status page
+2. contact form
+3. 
