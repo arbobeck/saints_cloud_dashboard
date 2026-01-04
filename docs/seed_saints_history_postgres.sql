@@ -1,5 +1,44 @@
-\c saintsdb
+-- Create Saints table
+CREATE TABLE IF NOT EXISTS "Saints" (
+    "Id" SERIAL PRIMARY KEY,
+    "Name" VARCHAR(255) NOT NULL,
+    "FeastDay" DATE NOT NULL,
+    "Patronages" TEXT
+);
 
+-- Create History table
+CREATE TABLE IF NOT EXISTS "History" (
+    "Id" SERIAL PRIMARY KEY,
+    "Name" VARCHAR(255) NOT NULL,
+    "Year" INTEGER NOT NULL
+);
+
+-- Create AdminUser table
+CREATE TABLE IF NOT EXISTS "AdminUser" (
+    "Id" SERIAL PRIMARY KEY,
+    "Username" VARCHAR(50) UNIQUE NOT NULL,
+    "PasswordHash" VARCHAR(255) NOT NULL,
+    "CreatedAt" TIMESTAMP DEFAULT NOW()
+);
+
+-- Create BlogDrafts table
+CREATE TABLE IF NOT EXISTS "BlogDrafts" (
+    "Id" SERIAL PRIMARY KEY,
+    "Title" VARCHAR(255) NOT NULL,
+    "Slug" VARCHAR(255) UNIQUE NOT NULL,
+    "Content" TEXT NOT NULL,
+    "Author" VARCHAR(100) DEFAULT 'Admin',
+    "Status" VARCHAR(20) DEFAULT 'draft',
+    "CreatedAt" TIMESTAMP DEFAULT NOW(),
+    "UpdatedAt" TIMESTAMP DEFAULT NOW(),
+    "PublishedAt" TIMESTAMP NULL
+);
+
+-- Indexes for performance
+CREATE INDEX IF NOT EXISTS idx_drafts_status ON "BlogDrafts"("Status");
+CREATE INDEX IF NOT EXISTS idx_drafts_slug ON "BlogDrafts"("Slug");
+
+-- Clear existing data (if any)
 TRUNCATE TABLE "Saints" RESTART IDENTITY CASCADE;
 TRUNCATE TABLE "History" RESTART IDENTITY CASCADE;
 
@@ -27,7 +66,7 @@ VALUES
     ('St. Eleutherius of Illyria', '2025-12-15', 'Prisoners, Converts'),
     ('St. Juliana of Nicomedia', '2025-12-21', 'Martyrs, Nurses');
 
--- Insert History (Id will auto-increment)
+-- Insert History
 INSERT INTO "History" ("Name", "Year")
 VALUES
     ('Pentecost', 33),
@@ -43,48 +82,7 @@ VALUES
     ('First Russian Greek Catholic parish in Moscow re-established', 1991),
     ('Pope John Paul II encyclical on Eastern Churches and ecumenism', 1995);
 
--- Add to your existing saintsdb database
-
--- Admin user table (single admin for now)
-CREATE TABLE "AdminUser" (
-    "Id" SERIAL PRIMARY KEY,
-    "Username" VARCHAR(50) UNIQUE NOT NULL,
-    "PasswordHash" VARCHAR(255) NOT NULL,
-    "CreatedAt" TIMESTAMP DEFAULT NOW()
-);
-
-
 -- Insert default admin user (password: "admin123" - CHANGE THIS!)
--- Password hash is bcrypt of "admin123"
 INSERT INTO "AdminUser" ("Username", "PasswordHash")
-VALUES ('admin', '$2a$12$aKLESGA83lwe3GNdo5.Ake2zjH4KZCH98mIHBORJ.UCRLxo4LwedW');
-
--- Note: You should change this password immediately after first login!
-
--- Blog drafts table
-CREATE TABLE "BlogDrafts" (
-    "Id" SERIAL PRIMARY KEY,
-    "Title" VARCHAR(255) NOT NULL,
-    "Slug" VARCHAR(255) UNIQUE NOT NULL,
-    "Content" TEXT NOT NULL,
-    "Author" VARCHAR(100) DEFAULT 'Admin',
-    "Status" VARCHAR(20) DEFAULT 'draft',
-    "CreatedAt" TIMESTAMP DEFAULT NOW(),
-    "UpdatedAt" TIMESTAMP DEFAULT NOW(),
-    "PublishedAt" TIMESTAMP NULL
-);
-
-CREATE TABLE "BlogPosts" (
-    "Id" SERIAL PRIMARY KEY,
-    "Title" TEXT NOT NULL,
-    "Slug" TEXT NOT NULL UNIQUE,
-    "Content" TEXT NOT NULL,
-    "Author" TEXT,
-    "PublishedAt" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    "CreatedAt" TIMESTAMPTZ NOT NULL DEFAULT NOW()
-);
-
--- Indexes for performance
-CREATE INDEX idx_drafts_status ON "BlogDrafts"("Status");
-CREATE INDEX idx_drafts_slug ON "BlogDrafts"("Slug");
-
+VALUES ('admin', '$2a$12$aKLESGA83lwe3GNdo5.Ake2zjH4KZCH98mIHBORJ.UCRLxo4LwedW')
+ON CONFLICT ("Username") DO NOTHING;
